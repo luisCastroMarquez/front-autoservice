@@ -5,12 +5,12 @@ const Section = () => {
   return (
     <Container className="d-flex justify-content-center flex ">
       <Row style={{ flexWar: "wrap", alignItems: "center" }}>
-        <Col>
+        <Col className="d-flex justify-content-center flex" style={{ margin: "20px" }}>
           <img
             src="https://i.pinimg.com/564x/fa/92/a7/fa92a78bb35bc997ab4566f14cd16d01.jpg"
             alt="Foto Auto"
             className="img-fluid" // Agregamos la clase img-fluid para hacer la imagen responsiva
-            style={{ width: "w-100" }} // Establecemos el ancho máximo de la imagen al 100%
+            style={{ filter: "drop-shadow(4px 6px 8px black)", width: "70%" }}
           />
         </Col>
         <Col>

@@ -3,54 +3,60 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Login = () => {
   return (
-    <Container
-      className="mt-5"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginBlockEnd: "60px",
-      }}
-    >
-      <Row>
-        <Col md={6}>
+    <Container className="mt-5">
+      <Row className="justify-content-center align-items-center">
+        <Col xs={8} md={4}>
           <img
-            src="https://i.pinimg.com/736x/d7/f7/2b/d7f72b89e02d58e06a3bc80396d15512.jpg" // Reemplaza con la URL de tu imagen
+            src="https://i.pinimg.com/736x/d7/f7/2b/d7f72b89e02d58e06a3bc80396d15512.jpg"
             alt="Imagen"
             className="img-fluid"
+            style={{ filter: "drop-shadow(4px 6px 8px black)", width: "90%" }}
           />
         </Col>
 
         {/* Lado Derecho: Formulario de Inicio de Sesión */}
-        <Col md={6} className="d-flex flex-column align-items-center">
+        <Col
+          xs={8}
+          md={4}
+          style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+        >
           <h1>Iniciar Sesión</h1>
-          <p>Bienvenido de nuevo. Ingresa tus datos.</p>
+          <p>¿Es tu primera vez? Registrate</p>
 
           {/* Formulario de Inicio de Sesión */}
-          <Form className="w-100">
+          <Form className="w-100 d-flex flex-column gap-4">
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Correo Electrónico</Form.Label>
               <Form.Control type="email" placeholder="Ingresa tu correo" />
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Label>Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Ingresa tu contraseña"
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="mb-3">
+            <Button
+              variant="primary"
+              type="submit"
+              className="mb-2"
+              style={{ width: "100%" }}
+            >
               Iniciar Sesión
             </Button>
           </Form>
 
-          <p>o inicia sesión con:</p>
-
           {/* Botones de Redes Sociales */}
-          <div className="d-flex">
-            <Button variant="outline-dark" className="mr-2">
+          <div className="d-flex flex-column gap-2">
+            <p className="d-flex justify-content-center">
+              ¿Olvidaste la Contraseña?
+            </p>
+            <p className="d-flex justify-content-center">
+              Al continuar, aceptas los terminos de venta los terminos de
+              servicios y la politica de privacidad actualizados.
+            </p>
+
+            <Button variant="outline-danger" className="mr-2">
               Google
             </Button>
             <Button variant="outline-primary" className="mr-2">
