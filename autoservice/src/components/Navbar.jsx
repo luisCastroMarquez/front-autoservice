@@ -1,10 +1,13 @@
 import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
+import { Link } from "react-router-dom"; // Importa Link
 
 const NavBar = () => {
   return (
     <Navbar bg="primary" variant="dark">
-      <Navbar.Brand style={{ marginLeft: '1%' }}  href="#home">Auto Service</Navbar.Brand>
+      <Navbar.Brand style={{ marginLeft: "1%" }} href="#home">
+        Auto Service
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse
         id="responsive-navbar-nav"
@@ -17,12 +20,17 @@ const NavBar = () => {
           <Nav.Link href="#taller">Taller Mecanico</Nav.Link>
         </Nav>
         <Nav className="ml-auto" style={{ marginLeft: "25%" }}>
-          <Button variant="outline-light" className="m-1">
-            Inicio Sesión
-          </Button>
-          <Button variant="outline-light" className="ml-2 m-1 ">
-            Registrarme
-          </Button>
+          {/* Utiliza Link para redirigir al componente Login */}
+          <Link to="/login">
+            <Button variant="outline-light" className="m-1">
+              Inicio Sesión
+            </Button>
+          </Link>
+          <Link to="/registro">
+            <Button variant="outline-light" className="ml-2 m-1 ">
+              Registrarme
+            </Button>
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

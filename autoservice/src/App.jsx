@@ -15,7 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<ContentContainer />} />
-        <Route path="/Login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/section" element={<Section />} />
         <Route path="/registro" element={<RegistroUsuario />} />
         <Route path="/carrito" element={<CarritoCompras />} />

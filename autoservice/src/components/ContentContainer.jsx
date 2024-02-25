@@ -7,7 +7,7 @@ import Section from "./Section";
 const ContentContainer = ({ children }) => {
   return (
     <>
-      <Container className="d-flex justify-content-center flex-column flex-direction-row">
+      <Container className="d-flex flex-column ">
         <Navbar />
         {children}
         <img

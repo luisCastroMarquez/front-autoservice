@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom"; // Importa Link
 
 const Login = () => {
   return (
@@ -10,7 +11,7 @@ const Login = () => {
             src="https://i.pinimg.com/736x/d7/f7/2b/d7f72b89e02d58e06a3bc80396d15512.jpg"
             alt="Imagen"
             className="img-fluid"
-            style={{ filter: "drop-shadow(4px 6px 8px black)", width: "90%" }}
+            style={{ filter: "drop-shadow(4px 6px 8px black)", width: "96%" }}
           />
         </Col>
 
@@ -35,15 +36,16 @@ const Login = () => {
                 placeholder="Ingresa tu contraseña"
               />
             </Form.Group>
-
-            <Button
-              variant="primary"
-              type="submit"
-              className="mb-2"
-              style={{ width: "100%" }}
-            >
-              Iniciar Sesión
-            </Button>
+            <Link to="/carrito">
+              <Button
+                variant="primary"
+                type="submit"
+                className="mb-2"
+                style={{ width: "100%" }}
+              >
+                Iniciar Sesión
+              </Button>
+            </Link>
           </Form>
 
           {/* Botones de Redes Sociales */}

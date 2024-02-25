@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom"; // Importa Link
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -38,13 +39,13 @@ const Login = () => {
         <Col
           sx={6}
           md={4}
-          style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+          style={{ display: "flex", flexDirection: "column", gap: "2px" }}
         >
           <h1>Registro de Usuario</h1>
           <p>Ingresa los siguientes datos.</p>
 
           {/* Formulario de Inicio de Sesión */}
-          <Form className="w-100 d-flex flex-column gap-2">
+          <Form className="w-100 d-flex flex-column mb-4 gap-2">
             <Form.Group controlId="formBasicEmail">
               <Form.Label></Form.Label>
               <Form.Control
@@ -81,9 +82,16 @@ const Login = () => {
             </Form.Group>
           </Form>
 
-          <Button variant="primary" type="submit" className="mb-3">
-            Iniciar Sesión
-          </Button>
+          <Link to="/carrito">
+              <Button
+                variant="primary"
+                type="submit"
+                className="mb-3"
+                style={{ width: "100%" }}
+              >
+                Iniciar Sesión
+              </Button>
+            </Link>
 
           <p>
             Al continuar, acepta los Términos de venta, los Términos de servicio

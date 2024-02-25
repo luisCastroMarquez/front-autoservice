@@ -7,26 +7,26 @@ const PerfilUsuario = () => {
   return (
     <Container className="mt-5 ">
       {/* Barra superior */}
-      <Row className="mb-5">
-        <Col xs={2}>
+      <Row className="d-flex align-items-center">
+        <Col xs={3} className="d-flex justify-content-center">
           <img src="ruta_del_logo" alt="Logo" className="img-fluid" />
         </Col>
-        <Col xs={8}>
+        <Col xs={6}>
           <InputGroup>
             <Form.Control type="text" placeholder="Buscar en la galería" />
           </InputGroup>
         </Col>
-        <Col xs={2} className="d-flex justify-content-end align-items-center">
-          <FaBell className="mr-3" />
-          <FaShare className="mr-3" />
-          <FaUser />
+        <Col xs={3} className="d-flex justify-content-center gap-4">
+          <FaBell className="mr-3" style={{ fontSize: "200%" }} />
+          <FaShare className="mr-3" style={{ fontSize: "200%" }} />
+          <FaUser style={{ fontSize: "200%" }} />
         </Col>
       </Row>
 
       {/* Contenido principal */}
       <Row className=" bg-light">
         <Col
-          className="d-flex flex-column align-items-center justify-content-center bg-light"
+          className="d-flex flex-column align-items-center justify-content-center gap-3 bg-light"
           xs={4}
         >
           <img
@@ -70,7 +70,7 @@ const PerfilUsuario = () => {
                 className="mb-4 d-flex align-items-center justify-content-center"
               >
                 <Card
-                  title={`Imagen ${index + 1}`}
+                  title={`Subaru WRX STI ${index + 1}`}
                   image="https://i.pinimg.com/564x/b6/9f/c2/b69fc2d0a9cba8cfca0ba681bdf28d45.jpg"
                   // Puedes agregar más propiedades según tus necesidades
                   // Ejemplo: title="Imagen 1", image="ruta_de_imagen", etc.

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, InputGroup, Form, Button } from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
 
@@ -17,8 +18,8 @@ const ProductoCompras = () => {
   return (
     <Container className="mt-5">
       {/* Barra superior */}
-      <Row className="mb-4">
-        <Col xs={2}>
+      <Row className="d-flex align-items-center">
+        <Col xs={2} className="d-flex justify-content-center">
           <img src="ruta_del_logo" alt="Logo" className="img-fluid" />
         </Col>
         <Col xs={8}>
@@ -29,24 +30,29 @@ const ProductoCompras = () => {
             />
           </InputGroup>
         </Col>
-        <Col xs={2} className="d-flex justify-content-end align-items-center">
-          <FaShoppingCart className="mr-3" />
-          <FaShoppingBasket className="mr-3" />
-          <FaUser />
+        <Col
+          xs={2}
+          className="d-flex justify-content-end align-items-center gap-4"
+        >
+          <FaShoppingCart className="mr-3" style={{ fontSize: "200%" }} />
+          <FaShoppingBasket className="mr-3" style={{ fontSize: "200%" }} />
+          <Link to="/usuario">
+            <FaUser className="mr-3" style={{ fontSize: "200%" }} />
+          </Link>
         </Col>
       </Row>
 
       {/* Contenido principal */}
-      <Row>
-        <Col xs={4}>
+      <Row className="m-5">
+        <Col xs={6}>
           <img
             src="https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg"
             alt="Producto"
             className="img-fluid"
           />
         </Col>
-        <Col xs={8}>
-          <h1>Nombre del Producto</h1>
+        <Col xs={6}>
+          <h1>Reloj P. de Turbo</h1>
           <p>Descripción corta del producto.</p>
           <p>
             <strong>Precio:</strong> $100
@@ -87,8 +93,8 @@ const ProductoCompras = () => {
         {[...Array(4)].map((_, index) => (
           <Col key={index} xs={3} className="mb-4">
             <Card
-              title={`Producto ${index + 1}`}
-              image="ruta_de_imagen"
+              title={`Turbo Timer HKS ${index + 1}`}
+              image="https://rcclin.cl/wp-content/uploads/2021/12/turbo-timer-apexi.jpg"
               price={`$${(index + 1) * 25}`}
               quality={`Calidad ${index + 1}`}
               description={`Descripción del producto ${index + 1}`}
