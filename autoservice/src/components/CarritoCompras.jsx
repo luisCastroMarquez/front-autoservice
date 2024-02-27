@@ -19,7 +19,11 @@ const CarritoCompras = () => {
       {/* Barra superior */}
       <Row className="d-flex align-items-center mb-5">
         <Col xs={3} className="d-flex justify-content-center">
-          <img src="ruta_del_logo" alt="Auto Service" className="img-fluid " />
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQikcrYqaQYC5VJ6zlVJDmk0-nJPujPcNj-PQ&s"
+            alt="Auto Service"
+            className="img-fluid "
+          />
         </Col>
         <Col xs={6}>
           <InputGroup>

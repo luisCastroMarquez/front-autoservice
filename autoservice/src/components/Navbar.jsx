@@ -6,7 +6,12 @@ const NavBar = () => {
   return (
     <Navbar bg="primary" variant="dark">
       <Navbar.Brand style={{ marginLeft: "1%" }} href="#home">
-        Auto Service
+        <img
+          className="mr-3"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQikcrYqaQYC5VJ6zlVJDmk0-nJPujPcNj-PQ&s"
+          alt="Auto Service"
+          style={{ width: "120px", height: "40px" }}
+        />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse

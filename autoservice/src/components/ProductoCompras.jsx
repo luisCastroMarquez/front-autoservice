@@ -20,7 +20,11 @@ const ProductoCompras = () => {
       {/* Barra superior */}
       <Row className="d-flex align-items-center">
         <Col xs={2} className="d-flex justify-content-center">
-          <img src="ruta_del_logo" alt="Logo" className="img-fluid" />
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQikcrYqaQYC5VJ6zlVJDmk0-nJPujPcNj-PQ&s"
+            alt="Logo"
+            className="img-fluid"
+          />
         </Col>
         <Col xs={8}>
           <InputGroup>
