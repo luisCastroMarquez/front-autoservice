@@ -12,15 +12,23 @@ import { FaBell, FaUser, FaQuestion } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
+import ListadoCompras from "./ListadoCompras";
 
 const CarritoCompras = () => {
+  //lista de productos
+  const productos = [
+    { id: 1, nombre: "Producto 1", precio: 20 },
+    { id: 2, nombre: "Producto 2", precio: 30 },
+    // ... otros productos en el carrito
+  ];
+
   return (
     <Container className="mt-5">
       {/* Barra superior */}
       <Row className="d-flex align-items-center mb-5">
         <Col xs={3} className="d-flex justify-content-center">
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQikcrYqaQYC5VJ6zlVJDmk0-nJPujPcNj-PQ&s"
+            src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
             alt="Auto Service"
             className="img-fluid "
           />
@@ -51,7 +59,7 @@ const CarritoCompras = () => {
       <Row className="d-flex align-items-center bg-light mb-4">
         <Col
           xs={6}
-          className="d-flex align-items-center flex-wrap justify-content-evenly"
+          className="d-flex align-items-center flex-wrap justify-content-evenly gap-2"
         >
           <h1>Producto Especial</h1>
           <h5>Un turbocompresor Garrett.</h5>
@@ -62,7 +70,7 @@ const CarritoCompras = () => {
           </p>
           <Link to="/producto">
             <Button variant="primary" className="mr-3">
-              Obtener ahora
+              Comprar Ahora
             </Button>
           </Link>
           <Button variant="secondary">Aprender más</Button>
@@ -83,9 +91,13 @@ const CarritoCompras = () => {
       {/* Cards */}
       <h3>Accesorios</h3>
 
-      <Row className="mt-4">
-        {[...Array(8)].map((_, index) => (
-          <Col key={index} xs={3} className="mb-4">
+      <Row className="d-flex flex-wrap justify-content-center mt-5 gap-4 ">
+        {[...Array(9)].map((_, index) => (
+          <Col
+            key={index}
+            className="d-flex justify-content-center"
+            style={{ filter: "drop-shadow(2px 4px 6px black)" }}
+          >
             <Card
               title={`Reloj P. de Turbo ${index + 1}`}
               image="https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg"
@@ -96,7 +108,6 @@ const CarritoCompras = () => {
           </Col>
         ))}
       </Row>
-
       <Footer />
     </Container>
   );

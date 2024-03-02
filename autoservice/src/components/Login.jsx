@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa Link
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          username,
+        }),
+      });
+
+      if (response.ok) {
+        // Autenticación exitosa, puedes redirigir al usuario a la página de carrito
+        console.log("Autenticación exitosa");
+        // Redirige a la ruta CarritoCompra después de iniciar sesión
+        // ...
+      } else {
+        // Autenticación fallida, maneja el error o muestra un mensaje al usuario
+        console.error("Error en la autenticación");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-center align-items-center">
@@ -27,21 +59,36 @@ const Login = () => {
           {/* Formulario de Inicio de Sesión */}
           <Form className="w-100 d-flex flex-column gap-4">
             <Form.Group controlId="formBasicEmail">
-              <Form.Control type="email" placeholder="Ingresa tu correo" />
+              <Form.Control
+                type="email"
+                placeholder="Ingresa tu correo"
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
               <Form.Control
                 type="password"
                 placeholder="Ingresa tu contraseña"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
+
+            <Form.Group controlId="formBasicUsername">
+              <Form.Control
+                type="text"
+                placeholder="Ingresa tu nombre de usuario"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+
             <Link to="/carrito">
               <Button
                 variant="primary"
                 type="submit"
                 className="mb-2"
                 style={{ width: "100%" }}
+                onClick={handleLogin}
               >
                 Iniciar Sesión
               </Button>

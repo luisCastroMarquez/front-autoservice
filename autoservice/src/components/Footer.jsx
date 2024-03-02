@@ -17,7 +17,7 @@ const Footer = () => {
     console.log("Cambiar idioma");
   };
   return (
-    <footer className="d-flex bg-primary text-light">
+    <footer className="d-flex bg-primary text-light mt-4">
       <Container>
         <Row className="justyfy-content-center align-items-center">
           <Col

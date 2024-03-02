@@ -8,8 +8,8 @@ const NavBar = () => {
       <Navbar.Brand style={{ marginLeft: "1%" }} href="#home">
         <img
           className="mr-3"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQikcrYqaQYC5VJ6zlVJDmk0-nJPujPcNj-PQ&s"
-          alt="Auto Service"
+          src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
+          alt="Car Service"
           style={{ width: "120px", height: "40px" }}
         />
       </Navbar.Brand>

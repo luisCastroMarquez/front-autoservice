@@ -9,7 +9,11 @@ const PerfilUsuario = () => {
       {/* Barra superior */}
       <Row className="d-flex align-items-center">
         <Col xs={3} className="d-flex justify-content-center">
-          <img src="ruta_del_logo" alt="Logo" className="img-fluid" />
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
+            alt="Logo"
+            className="img-fluid"
+          />
         </Col>
         <Col xs={6}>
           <InputGroup>
@@ -68,6 +72,7 @@ const PerfilUsuario = () => {
                 key={index}
                 xs={4}
                 className="mb-4 d-flex align-items-center justify-content-center"
+                style={{ filter: "drop-shadow(2px 4px 6px black)" }}
               >
                 <Card
                   title={`Subaru WRX STI ${index + 1}`}
