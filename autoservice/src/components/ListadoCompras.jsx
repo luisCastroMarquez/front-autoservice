@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
   const [compraFinalizada, setCompraFinalizada] = useState(false);
+  const [eliminadoMensaje, setEliminadoMensaje] = useState("");
   const navigate = useNavigate();
 
   console.log("onEliminarProducto:", onEliminarProducto);
 
   const handleEliminarProducto = (productoId) => {
-    // Lógica para eliminar el producto del carrito
-    onEliminarProducto(productoId);
+    const producto = carrito.find((p) => p.id === productoId);
+
+    if (producto) {
+      onEliminarProducto(productoId);
+      setEliminadoMensaje(`${producto.nombre} ha sido eliminado del carrito.`);
+
+      // Limpiar el mensaje después de 3 segundos
+      setTimeout(() => {
+        setEliminadoMensaje("");
+      }, 3500);
+    }
   };
 
   const handleEditarCantidad = (productoId, nuevaCantidad) => {
@@ -35,7 +45,7 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
     // Agregar un retraso de 5 segundos antes de redirigir
     setTimeout(() => {
       // Puedes redirigir al usuario a la página de métodos de pago aquí
-      navigate("/CarritoCompra");
+      navigate("/Carrito");
     }, 5000); // 5000 milisegundos = 5 segundos
   };
 
@@ -109,6 +119,14 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
               Compra finalizada. Redirigiendo a métodos de pago...
             </p>
           )}
+
+          {/* Mensaje de eliminación */}
+          {eliminadoMensaje && (
+            <Alert variant="success" className="mt-3">
+              {eliminadoMensaje}
+            </Alert>
+          )}
+
           {/* Botón para finalizar la compra */}
           {!compraFinalizada && (
             <Button

@@ -8,6 +8,7 @@ import Footer from "./Footer";
 const ProductoCompras = ({ onCompra }) => {
   const [cantidad, setCantidad] = useState(1);
   const navigate = useNavigate(); // Obtén la función navigate
+  const [mensaje, setMensaje] = useState("");
 
   // Lógica para manejar cambios en la cantidad y actualizar el total
   const handleCantidadChange = (event) => {
@@ -36,8 +37,13 @@ const ProductoCompras = ({ onCompra }) => {
 
   const handleAgregarCarrito = (producto) => {
     // Lógica para agregar al carrito, utilizar un estado global o contexto
-    // Ejemplo: dispatch({ type: "ADD_TO_CART", product: currentProduct, quantity: cantidad });
     console.log("Producto agregado al carrito:", producto);
+    setMensaje(`¡${producto.nombre} ha sido agregado al carrito!`);
+
+    // Limpiar el mensaje después de 3 segundos
+    setTimeout(() => {
+      setMensaje("");
+    }, 2500);
   };
 
   const total = `$${cantidad * 100}`;
@@ -124,6 +130,11 @@ const ProductoCompras = ({ onCompra }) => {
               Comprar
             </Button>
           </InputGroup>
+          {mensaje && (
+            <div className="alert alert-success mt-3" role="alert">
+              {mensaje}
+            </div>
+          )}
         </Col>
       </Row>
 

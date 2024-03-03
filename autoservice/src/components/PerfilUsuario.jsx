@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, InputGroup, Form, Button } from "react-bootstrap";
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 
 const PerfilUsuario = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState({
+    nombre: "Luis Castro M",
+    username: "@luiscm",
+    // Otros datos del usuario...
+  });
+
+  // Manejador para cambiar al modo de edición
+  const handleEditarClick = () => {
+    setIsEditing(true);
+  };
+
+  // Manejador para guardar los cambios y salir del modo de edición
+  const handleGuardarClick = () => {
+    // Aquí podrías realizar la lógica para guardar los cambios
+    // Puedes enviar una solicitud a tu servidor, actualizar el estado, etc.
+    setIsEditing(false);
+  };
+
   return (
-    <Container className="mt-5 ">
+    <Container>
       {/* Barra superior */}
       <Row className="d-flex align-items-center">
         <Col xs={3} className="d-flex justify-content-center">
@@ -39,11 +58,48 @@ const PerfilUsuario = () => {
             className="img-fluid align-items-center"
             style={{ filter: "drop-shadow(2px 4px 6px black)", width: "60%" }}
           />
-          <h2>Luis Castro M</h2>
-          <h5>@luiscm</h5>
-          <Button variant="primary" className="mb-3">
-            Editar Usuario
-          </Button>
+          {isEditing ? (
+            <Form>
+              <Form.Group className="mb-3" controlId="formNombre">
+                <Form.Label>Nombre</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese su nombre"
+                  value={userData.nombre}
+                  onChange={(e) =>
+                    setUserData({ ...userData, nombre: e.target.value })
+                  }
+                />
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese su mail"
+                  value={userData.username}
+                  onChange={(e) =>
+                    setUserData(...userData, username.target.value)
+                  }
+                />
+              </Form.Group>
+
+              {/* Otros campos de formulario para la edición... */}
+
+              <Button variant="primary" onClick={handleGuardarClick}>
+                Guardar Cambios
+              </Button>
+            </Form>
+          ) : (
+            <>
+              <h2>{userData.nombre}</h2>
+              <h5>{userData.username}</h5>
+              <Button
+                variant="primary"
+                className="mb-3"
+                onClick={handleEditarClick}
+              >
+                Editar Usuario
+              </Button>
+              {/* ... (código anterior) ... */}
+            </>
+          )}
           <Button variant="success" className="mb-3">
             Compartir Contenido
             <FaShare className="mr-3" />
@@ -66,12 +122,12 @@ const PerfilUsuario = () => {
         <Col xs={8}>
           {/* Cards */}
 
-          <Row className="mt-4">
+          <Row>
             {[...Array(5)].map((_, index) => (
               <Col
                 key={index}
                 xs={4}
-                className="mb-4 d-flex align-items-center justify-content-center"
+                className=" d-flex align-items-center justify-content-center mt-3"
                 style={{ filter: "drop-shadow(2px 4px 6px black)" }}
               >
                 <Card
