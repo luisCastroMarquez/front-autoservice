@@ -18,6 +18,25 @@ function App() {
   const handleCompra = (producto) => {
     setProductosEnCarrito([...productosEnCarrito, producto]);
   };
+
+  // Función para eliminar un producto específico del carrito
+  const handleEliminarProducto = (productoId) => {
+    // Filtrar los productos para excluir el que se desea eliminar
+    const nuevoCarrito = productosEnCarrito.filter(
+      (producto) => producto.id !== productoId
+    );
+    setProductosEnCarrito(nuevoCarrito);
+  };
+
+  // Función para editar la cantidad de un producto en el carrito
+  const handleEditarCantidad = (productoId, nuevaCantidad) => {
+    // Lógica para editar la cantidad del producto
+    // ...
+
+    // Después de editar, actualiza el estado del carrito
+    setProductosEnCarrito(nuevoCarrito);
+  };
+
   return (
     <Router>
       <Routes>
@@ -35,7 +54,13 @@ function App() {
         />
         <Route
           path="/listado"
-          element={<ListadoCompras carrito={productosEnCarrito} />}
+          element={
+            <ListadoCompras
+              carrito={productosEnCarrito}
+              onEditarCantidad={handleEditarCantidad}
+              onEliminarProducto={handleEliminarProducto}
+            />
+          }
         />
         <Route path="/usuario" element={<PerfilUsuario />} />
       </Routes>

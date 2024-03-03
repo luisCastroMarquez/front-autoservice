@@ -17,7 +17,7 @@ const Footer = () => {
     console.log("Cambiar idioma");
   };
   return (
-    <footer className="d-flex bg-primary text-light mt-4">
+    <footer className="d-flex bg-dark text-light mt-4">
       <Container>
         <Row className="justyfy-content-center align-items-center">
           <Col
@@ -28,13 +28,13 @@ const Footer = () => {
             style={{ gap: "8px" }}
           >
             <ListGroup
-              className="d-flex flex-wrap bg-primary"
+              className="d-flex flex-wrap bg-dark"
               style={{
                 flexDirection: "row",
                 gap: "16px",
               }}
             >
-              <ListGroupItem className="bg-primary border-primary">
+              <ListGroupItem className="bg-dark border-dark">
                 <ul className="list-unstyled mb-0 text-white">
                   <h5>Servicios</h5>
                   <li>Hogar</li>
@@ -43,7 +43,7 @@ const Footer = () => {
                   <li>Blogs</li>
                 </ul>
               </ListGroupItem>
-              <ListGroupItem className="bg-primary border-primary">
+              <ListGroupItem className="bg-dark border-dark">
                 <ul className="list-unstyled mb-0 text-white">
                   <h5>Compras</h5>
                   <li>Envios y Devoluciones</li>
@@ -51,7 +51,7 @@ const Footer = () => {
                   <li>Preguntas Frecuentes</li>
                 </ul>
               </ListGroupItem>
-              <ListGroupItem className="bg-primary border-primary">
+              <ListGroupItem className="bg-dark border-dark">
                 <ul className="list-unstyled mb-0 text-white">
                   <h5>Contacto</h5>
                   <li>Telefono:(+569) 98765432 </li>
@@ -69,10 +69,11 @@ const Footer = () => {
               Español <BiChevronDown size={24} />
             </Button>
           </Col>
-          <Col xs={12} md={4} lg={5}>
+          <Col xs={12} md={4} lg={4}>
+            <br />
             <p>Recibe Nuevas Promociones</p>
             <p>Escribenos cualquier consulta o suguerencia.</p>
-            <Form className="d-flex flex-wrap align-items-end">
+            <Form className="d-flex flex-wrap align-items-end gap-5">
               <Form.Group controlId="formBasicEmail" className="mr-2">
                 <Form.Label>Correo Electrónico</Form.Label>
                 <Form.Control type="email" placeholder="Ingresa tu correo" />
@@ -88,7 +89,8 @@ const Footer = () => {
               </Form.Group>
             </Form>
             <p className="text-center mt-3">
-              &copy; 2024 Mi Proyecto. Todos los derechos reservados.
+              &copy; Luis Andrés Castro Márquez Mi Proyecto 2024.
+              <br /> Todos los derechos reservados.
             </p>
           </Col>
         </Row>

@@ -23,6 +23,8 @@ const ProductoCompras = ({ onCompra }) => {
       nombre: "Reloj P. de Turbo",
       precio: 100,
       cantidad: parseInt(cantidad, 10),
+      imagen:
+        "https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg",
     };
 
     // Emitir el evento hacia el componente padre

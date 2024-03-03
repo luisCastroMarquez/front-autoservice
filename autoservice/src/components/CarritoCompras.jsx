@@ -12,7 +12,6 @@ import { FaBell, FaUser, FaQuestion } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
-import ListadoCompras from "./ListadoCompras";
 
 const CarritoCompras = () => {
   //lista de productos
@@ -23,30 +22,30 @@ const CarritoCompras = () => {
   ];
 
   return (
-    <Container className="mt-5">
+    <Container>
       {/* Barra superior */}
-      <Row className="d-flex align-items-center mb-5">
-        <Col xs={3} className="d-flex justify-content-center">
+      <Row className="d-flex align-items-center">
+        <Col xs={2} className="d-flex justify-content-center">
           <img
             src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
             alt="Auto Service"
             className="img-fluid "
           />
         </Col>
-        <Col xs={6}>
+        <Col xs={8}>
           <InputGroup>
             <Form.Control type="text" placeholder="Buscar en el carrito" />
             <InputGroup className="ml-auto d-flex justify-content-center">
               <Nav className="ml-auto">
-                <Nav.Link href="#home">Inicio</Nav.Link>
-                <Nav.Link href="#about">Nuestros Servicios</Nav.Link>
-                <Nav.Link href="#contact">Contactanos</Nav.Link>
-                <Nav.Link href="#taller">Taller Mecanico</Nav.Link>
+                <Nav.Link href="#home"style={{ color: 'black' }}>Inicio</Nav.Link>
+                <Nav.Link href="#about"style={{ color: 'black' }}>Nuestros Servicios</Nav.Link>
+                <Nav.Link href="#contact"style={{ color: 'black' }}>Contactanos</Nav.Link>
+                <Nav.Link href="#taller"style={{ color: 'black' }}>Taller Mecanico</Nav.Link>
               </Nav>
             </InputGroup>
           </InputGroup>
         </Col>
-        <Col xs={3} className="d-flex justify-content-center gap-4">
+        <Col xs={2} className="d-flex justify-content-center gap-4">
           <FaBell className="mr-3" style={{ fontSize: "200%" }} />
           <Link to="/usuario">
             <FaUser className="mr-3" style={{ fontSize: "200%" }} />
@@ -56,7 +55,7 @@ const CarritoCompras = () => {
       </Row>
 
       {/* Contenido principal */}
-      <Row className="d-flex align-items-center bg-light mb-4">
+      <Row className="d-flex align-items-center bg-light">
         <Col
           xs={6}
           className="d-flex align-items-center flex-wrap justify-content-evenly gap-2"
@@ -91,8 +90,8 @@ const CarritoCompras = () => {
       {/* Cards */}
       <h3>Accesorios</h3>
 
-      <Row className="d-flex flex-wrap justify-content-center mt-5 gap-4 ">
-        {[...Array(9)].map((_, index) => (
+      <Row className="d-flex flex-row justify-content-center gap-1">
+        {[...Array(8)].map((_, index) => (
           <Col
             key={index}
             className="d-flex justify-content-center"

@@ -1,18 +1,23 @@
-import React, { useState } from "react";
-import { Container, Row, Col, ListGroup, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const ListadoCompras = ({ carrito }) => {
-  const [carritoLocal, setCarritoLocal] = useState(carrito);
+const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
   const [compraFinalizada, setCompraFinalizada] = useState(false);
   const navigate = useNavigate();
 
-  // Función para agregar un producto comprado a la lista
-  const handleCompra = (producto) => {
-    setCarrito([...carritoLocal, producto]);
+  console.log("onEliminarProducto:", onEliminarProducto);
+
+  const handleEliminarProducto = (productoId) => {
+    // Lógica para eliminar el producto del carrito
+    onEliminarProducto(productoId);
   };
 
-  // Función para calcular el total de compras
+  const handleEditarCantidad = (productoId, nuevaCantidad) => {
+    // Lógica para editar la cantidad del producto
+    onEditarCantidad(productoId, nuevaCantidad);
+  };
+
   const calcularTotal = () => {
     if (!carrito) {
       return 0;
@@ -26,23 +31,69 @@ const ListadoCompras = ({ carrito }) => {
 
   const finalizarCompra = () => {
     setCompraFinalizada(true);
-    // Puedes redirigir al usuario a la página de métodos de pago aquí
-    // navigate("/metodos-pago");
+
+    // Agregar un retraso de 5 segundos antes de redirigir
+    setTimeout(() => {
+      // Puedes redirigir al usuario a la página de métodos de pago aquí
+      navigate("/CarritoCompra");
+    }, 5000); // 5000 milisegundos = 5 segundos
   };
 
+  useEffect(() => {
+    // Lógica adicional después de que se elimina un producto (si es necesario)
+    // ...
+  }, [carrito]);
+
   return (
-    <Container className="mt-5">
+    <Container className="d-flex mt-4">
       <Row>
         <Col>
           <h2>Carrito de Compras</h2>
 
           {/* Lista de productos en el carrito */}
-          <ListGroup>
+          <ListGroup
+            className="d-flex align-items-center"
+            style={{ filter: "drop-shadow(4px 4px 8px black)", gap: "10px" }}
+          >
             {carrito &&
               carrito.map((producto, index) => (
-                <ListGroup.Item key={index}>
-                  {producto.nombre} - ${producto.precio} - Cantidad:{" "}
-                  {producto.cantidad}
+                <ListGroup.Item
+                  key={index}
+                  className="d-flex align-items-center border-dark"
+                >
+                  <Row className="d-flex align-items-center">
+                    <Col xs={2}>
+                      <img
+                        src={producto.imagen}
+                        alt={producto.nombre}
+                        className="img-fluid"
+                      />
+                    </Col>
+                    <Col xs={5}>
+                      {producto.nombre} - ${producto.precio} - Cantidad:{" "}
+                      {producto.cantidad}
+                    </Col>
+                    <Col xs={3}>
+                      <Form.Control
+                        type="number"
+                        value={producto.cantidad}
+                        onChange={(e) =>
+                          handleEditarCantidad(
+                            producto.id,
+                            parseInt(e.target.value, 10)
+                          )
+                        }
+                      />
+                    </Col>
+                    <Col xs={2}>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleEliminarProducto(producto.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </Col>
+                  </Row>
                 </ListGroup.Item>
               ))}
           </ListGroup>
