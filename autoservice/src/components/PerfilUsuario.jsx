@@ -1,15 +1,28 @@
 import React, { useState } from "react";
-import { Container, Row, Col, InputGroup, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  Form,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 
 const PerfilUsuario = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [compartido, setCompartido] = useState(false);
+
   const [userData, setUserData] = useState({
     nombre: "Luis Castro M",
-    username: "@luiscm",
+    mail: "@luiscm",
+    fotoPerfil: "",
     // Otros datos del usuario...
   });
+
+  const [nuevaImagenPerfil, setNuevaImagenPerfil] = useState("");
 
   // Manejador para cambiar al modo de edición
   const handleEditarClick = () => {
@@ -20,7 +33,22 @@ const PerfilUsuario = () => {
   const handleGuardarClick = () => {
     // Aquí podrías realizar la lógica para guardar los cambios
     // Puedes enviar una solicitud a tu servidor, actualizar el estado, etc.
+    setUserData({ ...userData, fotoPerfil: nuevaImagenPerfil });
+
+    // Limpia el estado de nuevaImagenPerfil después de guardar
+    setNuevaImagenPerfil("");
+
     setIsEditing(false);
+  };
+
+  const handleCompartirContenido = () => {
+    // Muestra la alerta
+    setCompartido(true);
+
+    // Oculta la alerta después de 3 segundos
+    setTimeout(() => {
+      setCompartido(false);
+    }, 2000);
   };
 
   return (
@@ -70,13 +98,21 @@ const PerfilUsuario = () => {
                     setUserData({ ...userData, nombre: e.target.value })
                   }
                 />
+                <Form.Label>Mail</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingrese su mail"
-                  value={userData.username}
+                  value={userData.mail}
                   onChange={(e) =>
-                    setUserData(...userData, username.target.value)
+                    setUserData({ ...userData, mail: e.target.value })
                   }
+                />
+                <Form.Label>Imagen de Perfil</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="URL de la nueva imagen"
+                  value={nuevaImagenPerfil}
+                  onChange={(e) => setNuevaImagenPerfil(e.target.value)}
                 />
               </Form.Group>
 
@@ -89,7 +125,7 @@ const PerfilUsuario = () => {
           ) : (
             <>
               <h2>{userData.nombre}</h2>
-              <h5>{userData.username}</h5>
+              <h5>{userData.mail}</h5>
               <Button
                 variant="primary"
                 className="mb-3"
@@ -100,10 +136,20 @@ const PerfilUsuario = () => {
               {/* ... (código anterior) ... */}
             </>
           )}
-          <Button variant="success" className="mb-3">
+          <Button
+            variant="success"
+            className="mb-3"
+            onClick={handleCompartirContenido}
+          >
             Compartir Contenido
             <FaShare className="mr-3" />
           </Button>
+
+          {/* Mensaje de alerta */}
+          <Alert variant="success" show={compartido} className="mt-3">
+            Contenido compartido con éxito.
+          </Alert>
+
           <p>
             <FaUser className="mr-2" />
             Seguidores: 100
