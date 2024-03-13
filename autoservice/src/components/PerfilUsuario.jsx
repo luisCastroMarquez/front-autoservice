@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -14,13 +14,26 @@ import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 const PerfilUsuario = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [compartido, setCompartido] = useState(false);
-
   const [userData, setUserData] = useState({
-    nombre: "Luis Castro M",
-    mail: "@luiscm",
+    nombre: "",
+    mail: "",
     fotoPerfil: "",
-    // Otros datos del usuario...
+    likes: 0,
+    clave: "",
   });
+
+  useEffect(() => {
+    // Realizar la solicitud GET para obtener los datos de usuario
+    fetch("http://localhost:5173/usuarios")
+      .then((response) => response.json())
+      .then((data) => {
+        // Actualizar el estado con los datos del usuario obtenidos
+        setUserData(data);
+      })
+      .catch((error) =>
+        console.error("Error al obtener los datos de usuario:", error)
+      );
+  }, []);
 
   const [nuevaImagenPerfil, setNuevaImagenPerfil] = useState("");
 
@@ -81,7 +94,7 @@ const PerfilUsuario = () => {
           xs={4}
         >
           <img
-            src="https://i.pinimg.com/564x/e4/96/d7/e496d7ccf54886ee88eaab0717c27250.jpg"
+            src={userData.fotoPerfil} //"https://i.pinimg.com/564x/e4/96/d7/e496d7ccf54886ee88eaab0717c27250.jpg"
             alt="Usuario"
             className="img-fluid align-items-center"
             style={{ filter: "drop-shadow(2px 4px 6px black)", width: "60%" }}
@@ -152,11 +165,11 @@ const PerfilUsuario = () => {
 
           <p>
             <FaUser className="mr-2" />
-            Seguidores: 100
+            Seguidores: {userData.likes}
           </p>
           <p>
             <FaShare className="mr-2" />
-            Me gusta: 50
+            Me gusta: {userData.likes}
           </p>
           <p>
             <span role="img" aria-label="Hashtag">

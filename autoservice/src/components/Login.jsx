@@ -3,21 +3,19 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa Link
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [mail, setEmail] = useState("");
+  const [clave, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
-          password,
-          username,
+          mail,
+          clave,
         }),
       });
 
@@ -48,11 +46,7 @@ const Login = () => {
         </Col>
 
         {/* Lado Derecho: Formulario de Inicio de Sesión */}
-        <Col
-          xs={8}
-          md={4}
-          style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-        >
+        <Col xs={8} md={4} style={{ display: "flex", flexDirection: "column" }}>
           <h1>Iniciar Sesión</h1>
           <p>¿Es tu primera vez? Registrate</p>
 
@@ -71,14 +65,6 @@ const Login = () => {
                 type="password"
                 placeholder="Ingresa tu contraseña"
                 onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicUsername">
-              <Form.Control
-                type="text"
-                placeholder="Ingresa tu nombre de usuario"
-                onChange={(e) => setUsername(e.target.value)}
               />
             </Form.Group>
 

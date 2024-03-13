@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom"; // Importa Link
+import { Link } from "react-router-dom";
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    correo: "",
-    contraseña: "",
-    confirmarContraseña: "",
-  });
+const Registro = () => {
+  const initialState = {
+    nombre: "",
+    mail: "",
+    clave: "",
+    confirmarClave: "",
+    fotoPerfil: "",
+    likes: "",
+  };
 
-  const handleChange = (e) => {
+  const [formData, setFormData] = useState(initialState);
+
+  const handleRegistro = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -17,16 +22,39 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Agrega aquí la lógica para enviar los datos del formulario
-    console.log("Datos del formulario:", formData);
+    try {
+      const response = await fetch("http://localhost:3000/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      console.log("Respuesta del servidor:", data);
+      console.log("Autenticación exitosa");
+
+      // Limpiar el formulario
+      setFormData(initialState);
+
+      if (response.ok) {
+        // Si la respuesta es exitosa, redirigir al usuario al carrito
+        console.log("Usuario registrado:", data.mensaje);
+      } else {
+        console.error("Error al registrar usuario:", data.mensaje);
+      }
+    } catch (error) {
+      console.error("Error al enviar los datos del formulario:", error);
+    }
   };
 
   return (
     <Container className="mt-5">
       <Row className="justify-content-center align-items-center">
-        <Col xs={8} md={4}>
+        <Col xs={12} md={6} lg={4}>
           <img
             src="https://i.pinimg.com/564x/69/77/8c/69778c44bdc801aac48b21531a50a252.jpg" // Reemplaza con la URL de tu imagen
             alt="Imagen"
@@ -37,75 +65,99 @@ const Login = () => {
 
         {/* Lado Derecho: Formulario de Inicio de Sesión */}
         <Col
-          sx={6}
-          md={4}
+          sx={12}
+          md={6}
+          lg={4}
           style={{ display: "flex", flexDirection: "column", gap: "2px" }}
         >
-          <h1>Registro de Usuario</h1>
-          <p>Ingresa los siguientes datos.</p>
-
           {/* Formulario de Inicio de Sesión */}
-          <Form className="w-100 d-flex flex-column mb-4 gap-2">
+          <Form className="w-100 h d-flex flex-column gap-1 ">
+            <h2>Registro de Usuario</h2>
+            <p>Ingresa los siguientes datos.</p>
+            <Form.Group controlId="formaBasicNombre">
+              <Form.Control
+                type="text"
+                placeholder="Ingresa tu nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleRegistro}
+                required
+              />
+            </Form.Group>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label></Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Ingresa tu Correo Electrónico"
-                name="correo"
-                value={formData.correo}
-                onChange={handleChange}
+                name="mail"
+                value={formData.mail}
+                onChange={handleRegistro}
                 required
               />
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Label></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Ingresa tu contraseña"
-                name="contraseña"
-                value={formData.contraseña}
-                onChange={handleChange}
+                name="clave"
+                value={formData.clave}
+                onChange={handleRegistro}
                 required
               />
             </Form.Group>
             <Form.Group controlId="confirmarContraseña">
-              <Form.Label></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Confirma tu Contraseña"
-                name="confirmarContraseña"
-                value={formData.confirmarContraseña}
-                onChange={handleChange}
+                name="confirmarClave"
+                value={formData.confirmarClave}
+                onChange={handleRegistro}
                 required
+              />
+            </Form.Group>
+            <Form.Group controlId="fotoPerfil">
+              <Form.Control
+                type="text"
+                placeholder="Ingresa la URL de tu foto "
+                name="fotoPerfil"
+                value={formData.fotoPerfil}
+                onChange={handleRegistro}
+              />
+            </Form.Group>
+            <Form.Group controlId="likes">
+              <Form.Control
+                type="number"
+                placeholder="likes"
+                name="likes"
+                value={formData.likes}
+                onChange={handleRegistro}
               />
             </Form.Group>
           </Form>
 
           <Link to="/carrito">
-              <Button
-                variant="primary"
-                type="submit"
-                className="mb-3"
-                style={{ width: "100%" }}
-              >
-                Iniciar Sesión
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              type="submit"
+              className=""
+              style={{ width: "100%" }}
+              onClick={handleSubmit}
+            >
+              Iniciar Sesión
+            </Button>
+          </Link>
 
-          <p>
-            Al continuar, acepta los Términos de venta, los Términos de servicio
-            y la Política de privacidad actualizados.
-          </p>
+          <div>
+            <p>
+              Al continuar, acepta los Términos de venta, los Términos de
+              servicio y la Política de privacidad actualizados.
+            </p>
+          </div>
 
           {/* Botones de Redes Sociales */}
-          <div className="d-flex flex-column gap-2">
-            <Button variant="outline-danger" className="mr-2">
-              Google
-            </Button>
-            <Button variant="outline-primary" className="mr-2">
-              Facebook
-            </Button>
+          <div className="d-flex flex-column gap-1">
+            <Button variant="outline-danger">Google</Button>
+            <Button variant="outline-primary">Facebook</Button>
             <Button variant="outline-dark">Apple</Button>
           </div>
         </Col>
@@ -114,4 +166,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Registro;
