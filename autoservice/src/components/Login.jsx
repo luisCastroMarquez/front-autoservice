@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Login = () => {
   const [mail, setEmail] = useState("");
   const [clave, setPassword] = useState("");
+  const [showAlert, setShowAlert] = useState(false); // Estado para controlar la visibilidad de la alerta
 
   const handleLogin = async () => {
     try {
@@ -26,6 +27,7 @@ const Login = () => {
         window.location.href = "/usuarios";
       } else if (response.status === 401) {
         console.log("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
+        setShowAlert(true); // Mostrar la alerta si las credenciales son incorrectas
       } else {
         // Autenticación fallida, maneja el error o muestra un mensaje al usuario
         console.error(
@@ -45,6 +47,18 @@ const Login = () => {
     await handleLogin();
   };
 
+  useEffect(() => {
+    // Cuando showAlert cambia a true, inicia un temporizador para ocultar la alerta después de unos segundos
+    let timer;
+    if (showAlert) {
+      timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 2500);
+    }
+    // Limpiar el temporizador si el componente se desmonta o si showAlert cambia antes de que el temporizador expire
+    return () => clearTimeout(timer);
+  }, [showAlert]);
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-center align-items-center">
@@ -61,6 +75,23 @@ const Login = () => {
         <Col xs={8} md={4} style={{ display: "flex", flexDirection: "column" }}>
           <h1>Iniciar Sesión</h1>
           <p>¿Es tu primera vez? Registrate</p>
+
+          {/* Alerta de Bootstrap */}
+          {showAlert && (
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              Credenciales o correo incorrecto. Por favor, inténtalo de nuevo.
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+                onClick={() => setShowAlert(false)}
+              ></button>
+            </div>
+          )}
 
           {/* Formulario de Inicio de Sesión */}
           <Form

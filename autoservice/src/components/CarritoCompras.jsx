@@ -8,7 +8,7 @@ import {
   InputGroup,
   Nav,
 } from "react-bootstrap";
-import { FaBell, FaUser, FaQuestion } from "react-icons/fa";
+import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
@@ -20,6 +20,15 @@ const CarritoCompras = () => {
     { id: 2, nombre: "Producto 2", precio: 30 },
     // ... otros productos en el carrito
   ];
+
+  const handleAgregarCarrito = (producto) => {
+    // Lógica para agregar al carrito, utilizar un estado global o contexto
+    console.log("Producto agregado al carrito:", producto);
+
+    // Limpiar el mensaje después de 3 segundos
+    setTimeout(() => {
+    }, 2500);
+  };
 
   return (
     <Container>
@@ -37,10 +46,10 @@ const CarritoCompras = () => {
             <Form.Control type="text" placeholder="Buscar en el carrito" />
             <InputGroup className="ml-auto d-flex justify-content-center">
               <Nav className="ml-auto">
-                <Nav.Link href="#home" style={{ color: "black" }}>
+                <Nav.Link href="/#home" style={{ color: "black" }}>
                   Inicio
                 </Nav.Link>
-                <Nav.Link href="#about" style={{ color: "black" }}>
+                <Nav.Link href="/carrito" style={{ color: "black" }}>
                   Nuestros Servicios
                 </Nav.Link>
                 <Nav.Link href="#contact" style={{ color: "black" }}>
@@ -54,11 +63,15 @@ const CarritoCompras = () => {
           </InputGroup>
         </Col>
         <Col xs={2} className="d-flex justify-content-center gap-4">
-          <FaBell className="mr-3" style={{ fontSize: "200%" }} />
           <Link to="/login">
             <FaUser className="mr-3" style={{ fontSize: "200%" }} />
           </Link>
-          <FaQuestion style={{ fontSize: "200%" }} />
+          <Link to="/carrito">
+            <FaShoppingBasket className="mr-3" style={{ fontSize: "200%" }} />
+          </Link>
+          <Link to="/listado">
+            <FaShoppingCart className="mr-3" style={{ fontSize: "200%" }} />
+          </Link>
         </Col>
       </Row>
 
@@ -76,7 +89,7 @@ const CarritoCompras = () => {
             mezcla con el combustible.
           </p>
           <Link to="/producto">
-            <Button variant="primary" className="mr-3">
+            <Button variant="primary" className="mr-3" >
               Comprar Ahora
             </Button>
           </Link>
@@ -109,6 +122,8 @@ const CarritoCompras = () => {
               title={`Reloj P. de Turbo ${index + 1}`}
               image="https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg"
               price={`$${(index + 1) * 10}`}
+              description={`Descripción del producto ${index + 1}`}
+              onAgregarCarrito={(producto) => handleAgregarCarrito(producto)}
               // Puedes pasar propiedades específicas para cada card
               // Ejemplo: title="Producto 1", image="ruta_de_imagen", price="$20", etc.
             />

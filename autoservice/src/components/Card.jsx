@@ -35,7 +35,7 @@ const Card = ({ title, image, price, onAgregarCarrito }) => {
           width="30%"
         />
 
-        <Link to="/listado">
+        <Link to="/producto">
           <Button
             variant="primary"
             className="d-flex mr-3"

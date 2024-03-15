@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Container, Row, Col, InputGroup, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  Form,
+  Nav,
+  Button,
+} from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; // Importa useNavigate
 import Card from "./Card";
@@ -61,20 +69,37 @@ const ProductoCompras = ({ onCompra }) => {
         </Col>
         <Col xs={8}>
           <InputGroup>
-            <Form.Control
-              type="text"
-              placeholder="Buscar en el carrito de compras"
-            />
+            <Form.Control type="text" placeholder="Buscar en el carrito" />
+            <InputGroup className="ml-auto d-flex justify-content-center">
+              <Nav className="ml-auto">
+                <Nav.Link href="/#home" style={{ color: "black" }}>
+                  Inicio
+                </Nav.Link>
+                <Nav.Link href="/carrito" style={{ color: "black" }}>
+                  Nuestros Servicios
+                </Nav.Link>
+                <Nav.Link href="#contact" style={{ color: "black" }}>
+                  Contactanos
+                </Nav.Link>
+                <Nav.Link href="#taller" style={{ color: "black" }}>
+                  Taller Mecanico
+                </Nav.Link>
+              </Nav>
+            </InputGroup>
           </InputGroup>
         </Col>
         <Col
           xs={2}
           className="d-flex justify-content-end align-items-center gap-4"
         >
-          <FaShoppingCart className="mr-3" style={{ fontSize: "200%" }} />
-          <FaShoppingBasket className="mr-3" style={{ fontSize: "200%" }} />
-          <Link to="/usuario">
+          <Link to="/login">
             <FaUser className="mr-3" style={{ fontSize: "200%" }} />
+          </Link>
+          <Link to="/carrito">
+            <FaShoppingBasket className="mr-3" style={{ fontSize: "200%" }} />
+          </Link>
+          <Link to="/listado">
+            <FaShoppingCart className="mr-3" style={{ fontSize: "200%" }} />
           </Link>
         </Col>
       </Row>

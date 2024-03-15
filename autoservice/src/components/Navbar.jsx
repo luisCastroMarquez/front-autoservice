@@ -7,10 +7,9 @@ const NavBar = () => {
     <Navbar xs={12} md={8} lg={7} className="d-flex" bg="white">
       <Navbar.Brand className="d-flex justify-content-center" href="#home">
         <img
-          className="d-flex mr-3"
           src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
           alt="Car Service"
-          style={{ width: "40%" }}
+          style={{ width: "50%" }}
         />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -19,8 +18,8 @@ const NavBar = () => {
         id="responsive-navbar-nav"
       >
         <Nav className="ml-auto d-flex align-items-center">
-          <Nav.Link href="#home">Inicio</Nav.Link>
-          <Nav.Link href="#about">Nuestros Servicios</Nav.Link>
+          <Nav.Link href="/#home">Inicio</Nav.Link>
+          <Nav.Link href="/carrito">Nuestros Servicios</Nav.Link>
           <Nav.Link href="#contact">Contactanos</Nav.Link>
           <Nav.Link href="#taller">Taller Mecanico</Nav.Link>
         </Nav>
