@@ -7,7 +7,7 @@ import RegistroUsuario from "./components/RegistroUsuario";
 import CarritoCompras from "./components/CarritoCompras";
 import ProductoCompras from "./components/ProductoCompras";
 import ListadoCompras from "./components/ListadoCompras";
-import PerfilUsuario from "./components/PerfilUsuario";
+import PerfilUsuarios from "./components/PerfilUsuarios";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -62,7 +62,7 @@ function App() {
             />
           }
         />
-        <Route path="/usuario" element={<PerfilUsuario />} />
+        <Route path="/usuarios" element={<PerfilUsuarios />} />
       </Routes>
     </Router>
   );

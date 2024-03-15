@@ -37,17 +37,25 @@ const CarritoCompras = () => {
             <Form.Control type="text" placeholder="Buscar en el carrito" />
             <InputGroup className="ml-auto d-flex justify-content-center">
               <Nav className="ml-auto">
-                <Nav.Link href="#home"style={{ color: 'black' }}>Inicio</Nav.Link>
-                <Nav.Link href="#about"style={{ color: 'black' }}>Nuestros Servicios</Nav.Link>
-                <Nav.Link href="#contact"style={{ color: 'black' }}>Contactanos</Nav.Link>
-                <Nav.Link href="#taller"style={{ color: 'black' }}>Taller Mecanico</Nav.Link>
+                <Nav.Link href="#home" style={{ color: "black" }}>
+                  Inicio
+                </Nav.Link>
+                <Nav.Link href="#about" style={{ color: "black" }}>
+                  Nuestros Servicios
+                </Nav.Link>
+                <Nav.Link href="#contact" style={{ color: "black" }}>
+                  Contactanos
+                </Nav.Link>
+                <Nav.Link href="#taller" style={{ color: "black" }}>
+                  Taller Mecanico
+                </Nav.Link>
               </Nav>
             </InputGroup>
           </InputGroup>
         </Col>
         <Col xs={2} className="d-flex justify-content-center gap-4">
           <FaBell className="mr-3" style={{ fontSize: "200%" }} />
-          <Link to="/usuario">
+          <Link to="/login">
             <FaUser className="mr-3" style={{ fontSize: "200%" }} />
           </Link>
           <FaQuestion style={{ fontSize: "200%" }} />

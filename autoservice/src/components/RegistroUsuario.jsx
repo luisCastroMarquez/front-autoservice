@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 const Registro = () => {
   const initialState = {
@@ -13,18 +12,15 @@ const Registro = () => {
   };
 
   const [formData, setFormData] = useState(initialState);
-
-  const handleRegistro = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Validación de contraseña
+      if (formData.clave !== formData.confirmarClave) {
+        throw new Error("Las contraseñas no coinciden");
+      }
       const response = await fetch("http://localhost:3000/usuarios", {
         method: "POST",
         headers: {
@@ -32,23 +28,27 @@ const Registro = () => {
         },
         body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-      console.log("Respuesta del servidor:", data);
-      console.log("Autenticación exitosa");
-
-      // Limpiar el formulario
-      setFormData(initialState);
-
-      if (response.ok) {
-        // Si la respuesta es exitosa, redirigir al usuario al carrito
-        console.log("Usuario registrado:", data.mensaje);
-      } else {
-        console.error("Error al registrar usuario:", data.mensaje);
+      if (!response.ok) {
+        throw new Error("Error en la solicitud" + response.statusText);
       }
+
+      const responseData = await response.json(); // Obtener los datos del usuario desde la respuesta
+      localStorage.setItem("userData", JSON.stringify(responseData));
+      // Limpiar el formulario después de un registro exitoso
+      setFormData(initialState);
+      // Redirigir a la ruta del carrito después del registro exitoso
+      window.location.href = "/carrito";
     } catch (error) {
-      console.error("Error al enviar los datos del formulario:", error);
+      setError(error.message || "Error en la solicitud");
     }
+  };
+
+  const handleRegistro = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   return (
@@ -71,9 +71,13 @@ const Registro = () => {
           style={{ display: "flex", flexDirection: "column", gap: "2px" }}
         >
           {/* Formulario de Inicio de Sesión */}
-          <Form className="w-100 h d-flex flex-column gap-1 ">
+          <Form
+            className="w-100 h d-flex flex-column gap-1"
+            onSubmit={handleSubmit}
+          >
             <h2>Registro de Usuario</h2>
             <p>Ingresa los siguientes datos.</p>
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form.Group controlId="formaBasicNombre">
               <Form.Control
                 type="text"
@@ -134,19 +138,15 @@ const Registro = () => {
               />
             </Form.Group>
           </Form>
-
-          <Link to="/carrito">
-            <Button
-              variant="primary"
-              type="submit"
-              className=""
-              style={{ width: "100%" }}
-              onClick={handleSubmit}
-            >
-              Iniciar Sesión
-            </Button>
-          </Link>
-
+          <Button
+            variant="primary"
+            type="submit"
+            className=""
+            style={{ width: "100%" }}
+            onClick={handleSubmit}
+          >
+            Registrarme
+          </Button>
           <div>
             <p>
               Al continuar, acepta los Términos de venta, los Términos de

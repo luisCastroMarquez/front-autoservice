@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom"; // Importa Link
 
 const Login = () => {
   const [mail, setEmail] = useState("");
@@ -20,17 +19,30 @@ const Login = () => {
       });
 
       if (response.ok) {
-        // Autenticación exitosa, puedes redirigir al usuario a la página de carrito
-        console.log("Autenticación exitosa");
-        // Redirige a la ruta CarritoCompra después de iniciar sesión
-        // ...
+        console.log("Inicio de sesión exitoso.");
+        const { token } = await response.json();
+        localStorage.setItem("token", token);
+        // Redirigir a la ruta del usuarios después del registro exitoso
+        window.location.href = "/usuarios";
+      } else if (response.status === 401) {
+        console.log("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
       } else {
         // Autenticación fallida, maneja el error o muestra un mensaje al usuario
-        console.error("Error en la autenticación");
+        console.error(
+          "Error en la autenticación",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Manejando submit...");
+    await handleLogin();
   };
 
   return (
@@ -51,11 +63,15 @@ const Login = () => {
           <p>¿Es tu primera vez? Registrate</p>
 
           {/* Formulario de Inicio de Sesión */}
-          <Form className="w-100 d-flex flex-column gap-4">
+          <Form
+            className="w-100 d-flex flex-column gap-4"
+            onSubmit={handleSubmit}
+          >
             <Form.Group controlId="formBasicEmail">
               <Form.Control
                 type="email"
                 placeholder="Ingresa tu correo"
+                value={mail}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
@@ -63,22 +79,20 @@ const Login = () => {
             <Form.Group controlId="formBasicPassword">
               <Form.Control
                 type="password"
+                value={clave}
                 placeholder="Ingresa tu contraseña"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-
-            <Link to="/carrito">
-              <Button
-                variant="primary"
-                type="submit"
-                className="mb-2"
-                style={{ width: "100%" }}
-                onClick={handleLogin}
-              >
-                Iniciar Sesión
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              type="submit"
+              className="mb-2"
+              style={{ width: "100%" }}
+              onClick={handleSubmit}
+            >
+              Iniciar Sesión
+            </Button>
           </Form>
 
           {/* Botones de Redes Sociales */}

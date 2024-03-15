@@ -11,28 +11,28 @@ import {
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 
-const PerfilUsuario = () => {
+const PerfilUsuarios = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [compartido, setCompartido] = useState(false);
-  const [userData, setUserData] = useState({
-    nombre: "",
-    mail: "",
-    fotoPerfil: "",
-    likes: 0,
-    clave: "",
-  });
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Realizar la solicitud GET para obtener los datos de usuario
-    fetch("http://localhost:5173/usuarios")
-      .then((response) => response.json())
-      .then((data) => {
-        // Actualizar el estado con los datos del usuario obtenidos
-        setUserData(data);
-      })
-      .catch((error) =>
-        console.error("Error al obtener los datos de usuario:", error)
+    // Recupera los datos del usuario del almacenamiento local del navegador
+    const userDataString = localStorage.getItem("userData");
+    if (userDataString) {
+      try {
+        const parsedUserData = JSON.parse(userDataString);
+        console.log("Datos del usuario:", parsedUserData.usuario); // Agregar este console.log
+        setUserData(parsedUserData.usuario);
+      } catch (error) {
+        console.error("Error al analizar los datos del usuario:", error);
+        setUserData(null);
+      }
+    } else {
+      console.error(
+        "No se encontraron datos de usuario en el almacenamiento local"
       );
+    }
   }, []);
 
   const [nuevaImagenPerfil, setNuevaImagenPerfil] = useState("");
@@ -44,20 +44,15 @@ const PerfilUsuario = () => {
 
   // Manejador para guardar los cambios y salir del modo de edición
   const handleGuardarClick = () => {
-    // Aquí podrías realizar la lógica para guardar los cambios
-    // Puedes enviar una solicitud a tu servidor, actualizar el estado, etc.
-    setUserData({ ...userData, fotoPerfil: nuevaImagenPerfil });
-
+    setUserData({ ...userData, fotoperfil: nuevaImagenPerfil });
     // Limpia el estado de nuevaImagenPerfil después de guardar
     setNuevaImagenPerfil("");
-
     setIsEditing(false);
   };
 
   const handleCompartirContenido = () => {
     // Muestra la alerta
     setCompartido(true);
-
     // Oculta la alerta después de 3 segundos
     setTimeout(() => {
       setCompartido(false);
@@ -93,12 +88,16 @@ const PerfilUsuario = () => {
           className="d-flex flex-column align-items-center justify-content-center gap-3 bg-light"
           xs={4}
         >
-          <img
-            src={userData.fotoPerfil} //"https://i.pinimg.com/564x/e4/96/d7/e496d7ccf54886ee88eaab0717c27250.jpg"
-            alt="Usuario"
-            className="img-fluid align-items-center"
-            style={{ filter: "drop-shadow(2px 4px 6px black)", width: "60%" }}
-          />
+          {userData && userData.fotoperfil ? ( // Verifica si userData.fotoPerfil no es nulo ni una cadena vacía
+            <img
+              src={userData.fotoperfil}
+              alt="Usuario"
+              className="img-fluid align-items-center"
+              style={{ filter: "drop-shadow(2px 4px 6px black)", width: "60%" }}
+            />
+          ) : (
+            <p>No se ha proporcionado una imagen de perfil</p>
+          )}
           {isEditing ? (
             <Form>
               <Form.Group className="mb-3" controlId="formNombre">
@@ -106,7 +105,7 @@ const PerfilUsuario = () => {
                 <Form.Control
                   type="text"
                   placeholder="Ingrese su nombre"
-                  value={userData.nombre}
+                  value={userData?.nombre || ""}
                   onChange={(e) =>
                     setUserData({ ...userData, nombre: e.target.value })
                   }
@@ -115,7 +114,7 @@ const PerfilUsuario = () => {
                 <Form.Control
                   type="text"
                   placeholder="Ingrese su mail"
-                  value={userData.mail}
+                  value={userData?.mail || ""}
                   onChange={(e) =>
                     setUserData({ ...userData, mail: e.target.value })
                   }
@@ -137,8 +136,8 @@ const PerfilUsuario = () => {
             </Form>
           ) : (
             <>
-              <h2>{userData.nombre}</h2>
-              <h5>{userData.mail}</h5>
+              <h2>{userData?.nombre || ""}</h2>
+              <h5>{userData?.mail || ""}</h5>
               <Button
                 variant="primary"
                 className="mb-3"
@@ -146,7 +145,6 @@ const PerfilUsuario = () => {
               >
                 Editar Usuario
               </Button>
-              {/* ... (código anterior) ... */}
             </>
           )}
           <Button
@@ -165,11 +163,11 @@ const PerfilUsuario = () => {
 
           <p>
             <FaUser className="mr-2" />
-            Seguidores: {userData.likes}
+            Seguidores: {userData?.likes || ""}
           </p>
           <p>
             <FaShare className="mr-2" />
-            Me gusta: {userData.likes}
+            Me gusta: {userData?.likes || ""}
           </p>
           <p>
             <span role="img" aria-label="Hashtag">
@@ -178,9 +176,9 @@ const PerfilUsuario = () => {
             NombreHashtag: 3
           </p>
         </Col>
-        <Col xs={8}>
-          {/* Cards */}
 
+        {/* Cards */}
+        <Col xs={8}>
           <Row>
             {[...Array(5)].map((_, index) => (
               <Col
@@ -204,4 +202,4 @@ const PerfilUsuario = () => {
   );
 };
 
-export default PerfilUsuario;
+export default PerfilUsuarios;
