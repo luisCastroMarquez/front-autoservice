@@ -5,6 +5,7 @@ const Login = () => {
   const [mail, setEmail] = useState("");
   const [clave, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false); // Estado para controlar la visibilidad de la alerta
+  const [userData, setUserData] = useState(null);
 
   const handleLogin = async () => {
     try {
@@ -21,8 +22,12 @@ const Login = () => {
 
       if (response.ok) {
         console.log("Inicio de sesión exitoso.");
-        const { token } = await response.json();
-        localStorage.setItem("token", token);
+        const responseData = await response.json();
+
+        console.log(responseData);
+        localStorage.setItem("token", responseData.token);
+        localStorage.setItem("userData", JSON.stringify(responseData));
+        setUserData(responseData.usuario);
         // Redirigir a la ruta del usuarios después del registro exitoso
         window.location.href = "/usuarios";
       } else if (response.status === 401) {
@@ -48,6 +53,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    setUserData(null);
     // Cuando showAlert cambia a true, inicia un temporizador para ocultar la alerta después de unos segundos
     let timer;
     if (showAlert) {

@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-bootstrap";
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 
 const PerfilUsuarios = () => {
@@ -76,8 +77,14 @@ const PerfilUsuarios = () => {
           </InputGroup>
         </Col>
         <Col xs={3} className="d-flex justify-content-center gap-4">
+          <Link to="/carrito">
+            <FaShare
+              className="mr-3"
+              style={{ fontSize: "200%", transform: "rotate(180deg)" }}
+            />
+          </Link>
+
           <FaBell className="mr-3" style={{ fontSize: "200%" }} />
-          <FaShare className="mr-3" style={{ fontSize: "200%" }} />
           <FaUser style={{ fontSize: "200%" }} />
         </Col>
       </Row>
