@@ -8,11 +8,23 @@ import CarritoCompras from "./components/CarritoCompras";
 import ProductoCompras from "./components/ProductoCompras";
 import ListadoCompras from "./components/ListadoCompras";
 import PerfilUsuarios from "./components/PerfilUsuarios";
+import PerfilGaleria from "./components/PerfilGaleria";
+import { UserIdProvider } from "./context/UserIdProvider";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [productosEnCarrito, setProductosEnCarrito] = useState([]);
+
+  const [usuarioActual, setUsuarioActual] = useState({
+    id: "",
+    nombre: "",
+  });
+
+  // Función para actualizar el estado del usuario
+  const actualizarUsuario = (nuevoUsuario) => {
+    setUsuarioActual(nuevoUsuario);
+  };
 
   // Función para manejar la compra y agregar productos al carrito
   const handleCompra = (producto) => {
@@ -63,6 +75,14 @@ function App() {
           }
         />
         <Route path="/usuarios" element={<PerfilUsuarios />} />
+        <Route
+          path="/galeria"
+          element={
+            <UserIdProvider>
+              <PerfilGaleria />
+            </UserIdProvider>
+          }
+        />
       </Routes>
     </Router>
   );

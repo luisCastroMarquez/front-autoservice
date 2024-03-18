@@ -26,6 +26,7 @@ const Login = () => {
 
         console.log(responseData);
         localStorage.setItem("token", responseData.token);
+        localStorage.setItem("userId", responseData.usuario.id); // Aquí se establece el userId en localStorage
         localStorage.setItem("userData", JSON.stringify(responseData));
         setUserData(responseData.usuario);
         // Redirigir a la ruta del usuarios después del registro exitoso

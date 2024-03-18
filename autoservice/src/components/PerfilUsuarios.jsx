@@ -10,12 +10,16 @@ import {
 } from "react-bootstrap";
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Card from "./Card"; // Asegúrate de importar o crear el componente Card
+import { UserIdProvider } from "../context/UserIdProvider";
+import PerfilGaleria from "./PerfilGaleria";
 
 const PerfilUsuarios = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [compartido, setCompartido] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [nuevaImagenPerfil, setNuevaImagenPerfil] = useState("");
+
+  var auxUser = 0;
 
   useEffect(() => {
     // Recupera los datos del usuario del almacenamiento local del navegador
@@ -23,8 +27,8 @@ const PerfilUsuarios = () => {
     if (userDataString) {
       try {
         const parsedUserData = JSON.parse(userDataString);
-        console.log("Datos del usuario:", parsedUserData.usuario); // Agregar este console.log
         setUserData(parsedUserData.usuario);
+        auxUser = parsedUserData.usuario.id;
       } catch (error) {
         console.error("Error al analizar los datos del usuario:", error);
         setUserData(null);
@@ -35,8 +39,6 @@ const PerfilUsuarios = () => {
       );
     }
   }, []);
-
-  const [nuevaImagenPerfil, setNuevaImagenPerfil] = useState("");
 
   // Manejador para cambiar al modo de edición
   const handleEditarClick = () => {
@@ -61,7 +63,7 @@ const PerfilUsuarios = () => {
   };
 
   return (
-    <Container>
+    <Container className="d-flex flex-column">
       {/* Barra superior */}
       <Row className="d-flex align-items-center">
         <Col xs={3} className="d-flex justify-content-center">
@@ -69,6 +71,7 @@ const PerfilUsuarios = () => {
             src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
             alt="Logo"
             className="img-fluid"
+            style={{ width: "60%" }}
           />
         </Col>
         <Col xs={6}>
@@ -90,7 +93,7 @@ const PerfilUsuarios = () => {
       </Row>
 
       {/* Contenido principal */}
-      <Row className=" bg-light">
+      <Row className="d-flex bg-light  ">
         <Col
           className="d-flex flex-column align-items-center justify-content-center gap-3 bg-light"
           xs={4}
@@ -184,27 +187,22 @@ const PerfilUsuarios = () => {
           </p>
         </Col>
 
-        {/* Cards */}
-        <Col xs={8}>
-          <Row>
-            {[...Array(5)].map((_, index) => (
-              <Col
-                key={index}
-                xs={4}
-                className=" d-flex align-items-center justify-content-center mt-3"
-                style={{ filter: "drop-shadow(2px 4px 6px black)" }}
-              >
-                <Card
-                  title={`Subaru WRX STI ${index + 1}`}
-                  image="https://i.pinimg.com/564x/b6/9f/c2/b69fc2d0a9cba8cfca0ba681bdf28d45.jpg"
-                  // Puedes agregar más propiedades según tus necesidades
-                  // Ejemplo: title="Imagen 1", image="ruta_de_imagen", etc.
-                />
-              </Col>
-            ))}
-          </Row>
+        {/*  Sección de galería de imágenes  */}
+        <UserIdProvider>
+        <Col xs={8} className="">
+          <PerfilGaleria idUser={userData?.id || 0} />
         </Col>
+        </UserIdProvider>
       </Row>
+      <Alert
+        variant="success"
+        show={compartido}
+        onClose={() => setCompartido(false)}
+        dismissible
+        className="mt-3"
+      >
+        Imagen agregada correctamente.
+      </Alert>
     </Container>
   );
 };

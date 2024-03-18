@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Row,
@@ -14,20 +15,63 @@ import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
 
 const CarritoCompras = () => {
-  //lista de productos
-  const productos = [
-    { id: 1, nombre: "Producto 1", precio: 20 },
-    { id: 2, nombre: "Producto 2", precio: 30 },
-    // ... otros productos en el carrito
-  ];
+  const [productos, setProductos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 8;
 
-  const handleAgregarCarrito = (producto) => {
-    // Lógica para agregar al carrito, utilizar un estado global o contexto
-    console.log("Producto agregado al carrito:", producto);
+  useEffect(() => {
+    obtenerProductos(currentPage);
+  }, [currentPage]);
 
-    // Limpiar el mensaje después de 3 segundos
-    setTimeout(() => {
-    }, 2500);
+  const obtenerProductos = async (page) => {
+    try {
+      const response = await axios.get("http://localhost:3000/productos", {
+        params: {
+          page,
+          pageSize: 8, // Tamaño de página: 8 tarjetas por página
+        },
+      });
+      setProductos(response.data);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
+
+  const handlePaginaAnterior = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handlePaginaSiguiente = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handleAgregarCarrito = async (producto) => {
+    const formData = {
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      precio: producto.precio,
+      imagen: producto.imagen,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/productos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        console.log("Producto agregado al carrito:", producto);
+      } else {
+        console.error(
+          "Error al agregar producto al carrito:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error al agregar producto al carrito:", error);
+    }
   };
 
   return (
@@ -89,7 +133,7 @@ const CarritoCompras = () => {
             mezcla con el combustible.
           </p>
           <Link to="/producto">
-            <Button variant="primary" className="mr-3" >
+            <Button variant="primary" className="mr-3">
               Comprar Ahora
             </Button>
           </Link>
@@ -112,24 +156,40 @@ const CarritoCompras = () => {
       <h3>Accesorios</h3>
 
       <Row className="d-flex flex-row justify-content-center gap-1">
-        {[...Array(8)].map((_, index) => (
-          <Col
-            key={index}
-            className="d-flex justify-content-center"
-            style={{ filter: "drop-shadow(2px 4px 6px black)" }}
-          >
-            <Card
-              title={`Reloj P. de Turbo ${index + 1}`}
-              image="https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg"
-              price={`$${(index + 1) * 10}`}
-              description={`Descripción del producto ${index + 1}`}
-              onAgregarCarrito={(producto) => handleAgregarCarrito(producto)}
-              // Puedes pasar propiedades específicas para cada card
-              // Ejemplo: title="Producto 1", image="ruta_de_imagen", price="$20", etc.
-            />
-          </Col>
-        ))}
+        {productos
+          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+          .map((producto) => (
+            <Col
+              key={producto.id}
+              className="d-flex justify-content-center m-3"
+              style={{ filter: "drop-shadow(2px 4px 6px black)" }}
+            >
+              <Card
+                key={producto.id}
+                title={producto.nombre}
+                image={producto.imagen}
+                price={`$${producto.precio}`}
+                description={producto.descripcion}
+                onAgregarCarrito={() => handleAgregarCarrito(producto)}
+              />
+            </Col>
+          ))}
       </Row>
+      {/* Botones de paginación */}
+      <Col className="d-flex justify-content-center m-4 gap-4">
+        <Button onClick={handlePaginaAnterior} disabled={currentPage === 1}>
+          Anterior
+        </Button>
+        <span>
+          Página {currentPage} de {pageSize}
+        </span>
+        <Button
+          onClick={handlePaginaSiguiente}
+          disabled={currentPage === pageSize}
+        >
+          Siguiente
+        </Button>
+      </Col>
       <Footer />
     </Container>
   );
