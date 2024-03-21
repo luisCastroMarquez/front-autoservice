@@ -16,6 +16,7 @@ const Card = ({ title, image, price, onAgregarCarrito }) => {
     };
 
     onAgregarCarrito(producto);
+    console.log(producto);
   };
 
   return (

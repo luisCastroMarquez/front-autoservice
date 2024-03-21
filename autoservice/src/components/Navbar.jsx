@@ -19,7 +19,7 @@ const NavBar = () => {
       >
         <Nav className="ml-auto d-flex align-items-center">
           <Nav.Link href="/#home">Inicio</Nav.Link>
-          <Nav.Link href="/carrito">Nuestros Servicios</Nav.Link>
+          <Nav.Link href="/productos">Nuestros productos</Nav.Link>
           <Nav.Link href="#contact">Contactanos</Nav.Link>
           <Nav.Link href="#taller">Taller Mecanico</Nav.Link>
         </Nav>

@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { FaBell, FaShare, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { UserIdProvider } from "../context/UserIdProvider";
+import { UserIdProvider } from "../../context/UserIdProvider";
 import PerfilGaleria from "./PerfilGaleria";
 
 const PerfilUsuarios = () => {
@@ -76,7 +76,11 @@ const PerfilUsuarios = () => {
         </Col>
         <Col xs={6}>
           <InputGroup>
-            <Form.Control type="text" placeholder="Buscar en la galería" />
+            <Form.Control
+              id="buscar"
+              type="text"
+              placeholder="Buscar en la galería"
+            />
           </InputGroup>
         </Col>
         <Col xs={3} className="d-flex justify-content-center gap-4">
@@ -114,6 +118,7 @@ const PerfilUsuarios = () => {
                 <Form.Label>Nombre</Form.Label>
                 <Form.Control
                   type="text"
+                  id="nombre"
                   placeholder="Ingrese su nombre"
                   value={userData?.nombre || ""}
                   onChange={(e) =>
@@ -123,6 +128,7 @@ const PerfilUsuarios = () => {
                 <Form.Label>Mail</Form.Label>
                 <Form.Control
                   type="text"
+                  id="mail"
                   placeholder="Ingrese su mail"
                   value={userData?.mail || ""}
                   onChange={(e) =>
@@ -132,6 +138,7 @@ const PerfilUsuarios = () => {
                 <Form.Label>Imagen de Perfil</Form.Label>
                 <Form.Control
                   type="text"
+                  id="imagen"
                   placeholder="URL de la nueva imagen"
                   value={nuevaImagenPerfil}
                   onChange={(e) => setNuevaImagenPerfil(e.target.value)}
@@ -189,9 +196,9 @@ const PerfilUsuarios = () => {
 
         {/*  Sección de galería de imágenes  */}
         <UserIdProvider>
-        <Col xs={8} className="">
-          <PerfilGaleria idUser={userData?.id || 0} />
-        </Col>
+          <Col xs={8} className="">
+            <PerfilGaleria idUser={userData?.id || 0} />
+          </Col>
         </UserIdProvider>
       </Row>
       <Alert

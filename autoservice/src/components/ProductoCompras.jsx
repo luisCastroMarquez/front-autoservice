@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import DetalleProducto from "./DetalleProducto";
+import { ProductIdProvider } from "../context/ProductIdContext"; // Importa el ProductIdProvider
+import axios from "axios";
 import {
   Container,
   Row,
@@ -14,47 +17,47 @@ import Card from "./Card";
 import Footer from "./Footer";
 
 const ProductoCompras = ({ onCompra }) => {
-  const [cantidad, setCantidad] = useState(1);
-  const navigate = useNavigate(); // Obtén la función navigate
-  const [mensaje, setMensaje] = useState("");
+  const [productos, setProductos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
+  const navigate = useNavigate();
+  const [productoSeleccionado, setProductoSeleccionado] = useState();
 
-  // Lógica para manejar cambios en la cantidad y actualizar el total
-  const handleCantidadChange = (event) => {
-    const nuevaCantidad = event.target.value;
-    setCantidad(nuevaCantidad);
+  // Cuando se selecciona un producto
+  const handleProductoSeleccionado = (producto) => {
+    setProductoSeleccionado(producto);
   };
 
-  // Función para manejar la compra y agregar productos seleccionados al estado
-  const handleCompra = () => {
-    // Lógica para agregar el producto al carrito
-    const producto = {
-      id: 1,
-      nombre: "Reloj P. de Turbo",
-      precio: 100,
-      cantidad: parseInt(cantidad, 10),
-      imagen:
-        "https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg",
-    };
+  useEffect(() => {
+    obtenerProductos(currentPage);
+  }, [currentPage]);
 
-    // Emitir el evento hacia el componente padre
-    onCompra(producto);
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/productos", {});
+      setProductos(response.data);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
 
-    // Navega a la página de listado después de la compra
-    navigate("/listado");
+  const handlePaginaAnterior = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handlePaginaSiguiente = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   const handleAgregarCarrito = (producto) => {
     // Lógica para agregar al carrito, utilizar un estado global o contexto
+    // Lógica para agregar al carrito
+    onCompra(producto);
     console.log("Producto agregado al carrito:", producto);
-    setMensaje(`¡${producto.nombre} ha sido agregado al carrito!`);
 
     // Limpiar el mensaje después de 3 segundos
-    setTimeout(() => {
-      setMensaje("");
-    }, 2500);
+    setTimeout(() => {}, 2500);
   };
-
-  const total = `$${cantidad * 100}`;
 
   return (
     <Container className="mt-5">
@@ -105,87 +108,58 @@ const ProductoCompras = ({ onCompra }) => {
       </Row>
 
       {/* Contenido principal */}
-      <Row className="m-5">
-        <Col xs={6}>
-          <img
-            src="https://nolimit.ua/content/images/9/480x480l50nn0/innovate-mtx-l-plus-shpl-zond-kabel-240-sm-69885348339333.jpg"
-            alt="Producto"
-            className="img-fluid"
-          />
-        </Col>
-        <Col xs={6}>
-          <h1>Reloj P. de Turbo</h1>
-          <p>Descripción corta del producto.</p>
-          <p>
-            <strong>Precio:</strong> $100
-          </p>
-          <p>Detalles adicionales del producto.</p>
-          <InputGroup className="mb-3">
-            <InputGroup>
-              <InputGroup.Text>Total</InputGroup.Text>
-            </InputGroup>
-            <Form.Control type="text" readOnly value={`$${cantidad * 100}`} />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup>
-              <InputGroup.Text>Cantidad</InputGroup.Text>
-            </InputGroup>
-            <Form.Control
-              type="number"
-              value={cantidad}
-              onChange={handleCantidadChange}
-            />
-          </InputGroup>
-          <InputGroup xs={6} className="mb-3 gap-4">
-            <Button
-              variant="primary"
-              className="mr-3"
-              onClick={() =>
-                handleAgregarCarrito({
-                  id: 1,
-                  nombre: "Reloj P. de Turbo",
-                  precio: 20.0,
-                  // ... otras propiedades del producto
-                })
-              }
-            >
-              Agregar al Carrito
-            </Button>
-            <Button variant="success" className="mr-3" onClick={handleCompra}>
-              Comprar
-            </Button>
-          </InputGroup>
-          {mensaje && (
-            <div className="alert alert-success mt-3" role="alert">
-              {mensaje}
-            </div>
+      <ProductIdProvider>
+        <Col xs={8} className="">
+          {/* Asegúrate de que productos esté definido y no esté vacío antes de pasar el producto */}
+          {productos.length > 0 && (
+            <>
+              <DetalleProducto
+                setProductoSeleccionado={setProductoSeleccionado}
+                onSeleccionarProducto={handleProductoSeleccionado}
+              />
+            </>
           )}
         </Col>
-      </Row>
+      </ProductIdProvider>
 
       {/* Cards */}
+      <h3>Otros Porductos</h3>
 
-      <Row className="d-flex flex-wrap justify-content-center mt-5 gap-4 bg-light">
-        <h3>Otros Accesorios</h3>
-        {[...Array(4)].map((_, index) => (
-          <Col
-            key={index}
-            className=" d-flex justify-content-center mb-4"
-            style={{ filter: "drop-shadow(2px 4px 6px black)" }}
-          >
-            <Card
-              title={`Turbo Timer HKS ${index + 1}`}
-              image="https://rcclin.cl/wp-content/uploads/2021/12/turbo-timer-apexi.jpg"
-              price={`$${(index + 1) * 25}`}
-              quality={`Calidad ${index + 1}`}
-              description={`Descripción del producto ${index + 1}`}
-              onAgregarCarrito={(producto) => handleAgregarCarrito(producto)}
-              // Puedes pasar propiedades específicas para cada card
-              // Ejemplo: title="Producto 1", image="ruta_de_imagen", price="$20", etc.
-            />
-          </Col>
-        ))}
+      <Row className="d-flex flex-wrap justify-content-center gap-4 bg-light">
+        {productos
+          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+          .map((producto) => (
+            <Col
+              key={producto.id}
+              className="d-flex justify-content-center m-3"
+              style={{ filter: "drop-shadow(2px 4px 6px black)" }}
+            >
+              <Card
+                key={producto.id}
+                title={producto.nombre}
+                image={producto.imagen}
+                price={`$${producto.precio}`}
+                description={producto.descripcion}
+                onAgregarCarrito={() => handleAgregarCarrito(producto)}
+              />
+            </Col>
+          ))}
       </Row>
+      {/* Botones de paginación */}
+      <Col className="d-flex justify-content-center m-4 gap-4">
+        <Button onClick={handlePaginaAnterior} disabled={currentPage === 1}>
+          Anterior
+        </Button>
+        <span>
+          Página {currentPage} de {pageSize}
+        </span>
+        <Button
+          onClick={handlePaginaSiguiente}
+          disabled={currentPage === pageSize}
+        >
+          Siguiente
+        </Button>
+      </Col>
       <Footer />
     </Container>
   );

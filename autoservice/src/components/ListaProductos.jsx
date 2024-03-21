@@ -14,10 +14,13 @@ import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
 import Footer from "./Footer";
 
-const CarritoCompras = () => {
+const ListaProductos = ({ onCompra }) => {
   const [productos, setProductos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const pageSize = 8;
+
+  console.log("Contenido :", productoSeleccionado);
 
   useEffect(() => {
     obtenerProductos(currentPage);
@@ -45,33 +48,14 @@ const CarritoCompras = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  const handleAgregarCarrito = async (producto) => {
-    const formData = {
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      precio: producto.precio,
-      imagen: producto.imagen,
-    };
+  const handleAgregarCarrito = (producto) => {
+    // Lógica para agregar al carrito, utilizar un estado global o contexto
+    // Lógica para agregar al carrito
+    onCompra(producto);
+    console.log("Producto agregado al carrito:", producto);
 
-    try {
-      const response = await fetch("http://localhost:3000/productos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        console.log("Producto agregado al carrito:", producto);
-      } else {
-        console.error(
-          "Error al agregar producto al carrito:",
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("Error al agregar producto al carrito:", error);
-    }
+    // Limpiar el mensaje después de 3 segundos
+    setTimeout(() => {}, 2500);
   };
 
   return (
@@ -155,7 +139,7 @@ const CarritoCompras = () => {
       {/* Cards */}
       <h3>Accesorios</h3>
 
-      <Row className="d-flex flex-row justify-content-center gap-1">
+      <Row className="d-flex flex-wrap justify-content-center gap-4 bg-light">
         {productos
           .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           .map((producto) => (
@@ -195,4 +179,4 @@ const CarritoCompras = () => {
   );
 };
 
-export default CarritoCompras;
+export default ListaProductos;

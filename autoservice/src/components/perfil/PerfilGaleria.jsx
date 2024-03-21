@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import CardUsuarios from "./CardUsuarios"; // Importa el componente Card
-import { useUserId } from "../context/UserIdProvider";
+import { useUserId } from "../../context/UserIdProvider";
 
 const PerfilGaleria = () => {
   const { userId } = useUserId();
@@ -26,9 +26,7 @@ const PerfilGaleria = () => {
       const data = await response.json();
       setCards(data);
     } catch (error) {
-      console.error(
-        "Error al obtener las imágenes de la galería:", error
-      );
+      console.error("Error al obtener las imágenes de la galería:", error);
     }
   };
 
