@@ -11,35 +11,37 @@ import ListadoCompras from "./components/ListadoCompras";
 import PerfilUsuarios from "./components/perfil/PerfilUsuarios";
 import PerfilGaleria from "./components/perfil/PerfilGaleria";
 import { UserIdProvider } from "./context/UserIdProvider";
-import { ProductIdProvider } from "./context/ProductIdContext";
-import DetalleProducto from "./components/DetalleProducto";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ProductoProvider } from "./context/ProductosContext";
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/home" element={<ContentContainer />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<RegistroUsuario />} />
-          <Route path="/usuarios" element={<PerfilUsuarios />} />
-          <Route
-            path="/galeria"
-            element={
-              <UserIdProvider>
-                <PerfilGaleria />
-              </UserIdProvider>
-            }
-          />
-          <Route path="/productos" element={<ListaProductos />} />
+      <ProductoProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/home" element={<ContentContainer />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<RegistroUsuario />} />
+            <Route path="/usuarios" element={<PerfilUsuarios />} />
+            <Route
+              path="/galeria"
+              element={
+                <UserIdProvider>
+                  <PerfilGaleria />
+                </UserIdProvider>
+              }
+            />
+            <Route path="/productos" element={<ListaProductos />} />
+            <Route path="/producto/:id" element={<ProductoCompras />} />
 
-          <Route path="*" element={<Navigate replace to="/home/" />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+            <Route path="*" element={<Navigate replace to="/home/" />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </ProductoProvider>
     </>
   );
 };

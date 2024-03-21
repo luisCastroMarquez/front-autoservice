@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useProductosContext } from "../context/ProductosContext";
+
 import {
   Container,
   Row,
@@ -12,33 +13,14 @@ import {
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link
 import Card from "./Card"; // Asegúrate de importar o crear el componente Card
-import Footer from "./Footer";
 
-const ListaProductos = ({ onCompra }) => {
-  const [productos, setProductos] = useState([]);
+const ListaProductos = () => {
+  const { dataProductos } = useProductosContext();
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const pageSize = 8;
 
-  console.log("Contenido :", productoSeleccionado);
-
-  useEffect(() => {
-    obtenerProductos(currentPage);
-  }, [currentPage]);
-
-  const obtenerProductos = async (page) => {
-    try {
-      const response = await axios.get("http://localhost:3000/productos", {
-        params: {
-          page,
-          pageSize: 8, // Tamaño de página: 8 tarjetas por página
-        },
-      });
-      setProductos(response.data);
-    } catch (error) {
-      console.error("Error al obtener productos:", error);
-    }
-  };
+  console.log("Contenido :", dataProductos);
 
   const handlePaginaAnterior = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -140,7 +122,7 @@ const ListaProductos = ({ onCompra }) => {
       <h3>Accesorios</h3>
 
       <Row className="d-flex flex-wrap justify-content-center gap-4 bg-light">
-        {productos
+        {dataProductos
           .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           .map((producto) => (
             <Col
@@ -148,14 +130,7 @@ const ListaProductos = ({ onCompra }) => {
               className="d-flex justify-content-center m-3"
               style={{ filter: "drop-shadow(2px 4px 6px black)" }}
             >
-              <Card
-                key={producto.id}
-                title={producto.nombre}
-                image={producto.imagen}
-                price={`$${producto.precio}`}
-                description={producto.descripcion}
-                onAgregarCarrito={() => handleAgregarCarrito(producto)}
-              />
+              <Card key={producto.id} dataProducto={producto} />
             </Col>
           ))}
       </Row>
@@ -174,7 +149,6 @@ const ListaProductos = ({ onCompra }) => {
           Siguiente
         </Button>
       </Col>
-      <Footer />
     </Container>
   );
 };

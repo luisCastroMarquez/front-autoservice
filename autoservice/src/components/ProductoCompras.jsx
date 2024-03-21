@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import DetalleProducto from "./DetalleProducto";
-import { ProductIdProvider } from "../context/ProductIdContext"; // Importa el ProductIdProvider
-import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useProductosContext } from "../context/ProductosContext";
 import {
   Container,
   Row,
@@ -12,33 +11,29 @@ import {
   Button,
 } from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom"; // Importa useNavigate
+import { Link } from "react-router-dom"; // Importa useNavigate
 import Card from "./Card";
 import Footer from "./Footer";
 
-const ProductoCompras = ({ onCompra }) => {
-  const [productos, setProductos] = useState([]);
+const ProductoCompras = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
-  const navigate = useNavigate();
-  const [productoSeleccionado, setProductoSeleccionado] = useState();
 
-  // Cuando se selecciona un producto
-  const handleProductoSeleccionado = (producto) => {
-    setProductoSeleccionado(producto);
-  };
+  const { id } = useParams();
+  const { dataProductos, addToCart } = useProductosContext();
+  const [dataProducto, setDataProducto] = useState({});
 
   useEffect(() => {
-    obtenerProductos(currentPage);
-  }, [currentPage]);
+    const data = dataProductos.find((producto) => producto.id === id);
+    console.log("el objeto essssss: " + data);
+    console.log("pero el id essssss: " + id);
 
-  const obtenerProductos = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/productos", {});
-      setProductos(response.data);
-    } catch (error) {
-      console.error("Error al obtener productos:", error);
-    }
+    setDataProducto(data);
+  }, [dataProductos, id]);
+
+  // Agrega al carro la producto
+  const handleAddToCartClick = (producto) => {
+    addToCart(producto);
   };
 
   const handlePaginaAnterior = () => {
@@ -47,16 +42,6 @@ const ProductoCompras = ({ onCompra }) => {
 
   const handlePaginaSiguiente = () => {
     setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handleAgregarCarrito = (producto) => {
-    // Lógica para agregar al carrito, utilizar un estado global o contexto
-    // Lógica para agregar al carrito
-    onCompra(producto);
-    console.log("Producto agregado al carrito:", producto);
-
-    // Limpiar el mensaje después de 3 segundos
-    setTimeout(() => {}, 2500);
   };
 
   return (
@@ -108,25 +93,75 @@ const ProductoCompras = ({ onCompra }) => {
       </Row>
 
       {/* Contenido principal */}
-      <ProductIdProvider>
-        <Col xs={8} className="">
-          {/* Asegúrate de que productos esté definido y no esté vacío antes de pasar el producto */}
-          {productos.length > 0 && (
-            <>
-              <DetalleProducto
-                setProductoSeleccionado={setProductoSeleccionado}
-                onSeleccionarProducto={handleProductoSeleccionado}
-              />
-            </>
-          )}
-        </Col>
-      </ProductIdProvider>
+      <Col xs={8} className="">
+        {/* Asegúrate de que productos esté definido y no esté vacío antes de pasar el producto */}
+        {dataProductos.length > 0 && (
+          <>
+            <Row className="m-5">
+              <Col xs={6}>
+                {dataProducto && (
+                  <img
+                    src={dataProducto.imagen}
+                    alt="Producto"
+                    className="img-fluid"
+                  />
+                )}
+              </Col>
+              <Col xs={6}>
+                {dataProducto && (
+                  <>
+                    <h1>{dataProducto.nombre}</h1>
+                    <p>
+                      <strong>{dataProducto.descripcion}</strong>
+                    </p>
+                    <p>
+                      <strong>Precio: ${dataProducto.precio}</strong>
+                    </p>
+                    <p>Detalles adicionales del producto.</p>
+                    <InputGroup className="mb-3">
+                      <InputGroup>
+                        <InputGroup.Text>Total</InputGroup.Text>
+                      </InputGroup>
+                      <Form.Control
+                        id="total"
+                        type="text"
+                        readOnly
+                        value={`$${dataProducto.precio}`}
+                      />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                      <InputGroup>
+                        <InputGroup.Text>Cantidad</InputGroup.Text>
+                      </InputGroup>
+                      <Form.Control id="cantidad" type="number" value={1} />
+                    </InputGroup>
+                    <InputGroup xs={6} className="mb-3 gap-4">
+                      <Button
+                        variant="primary"
+                        onClick={handleAddToCartClick(dataProducto)}
+                      >
+                        Agregar al Carrito
+                      </Button>
+                      <Button variant="success">Comprar producto</Button>
+                      <Link to="/carrito">
+                        <Button variant="secondary" className="mediumbutton">
+                          Volver Atras
+                        </Button>
+                      </Link>
+                    </InputGroup>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </>
+        )}
+      </Col>
 
       {/* Cards */}
       <h3>Otros Porductos</h3>
 
       <Row className="d-flex flex-wrap justify-content-center gap-4 bg-light">
-        {productos
+        {dataProductos
           .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           .map((producto) => (
             <Col
@@ -134,14 +169,7 @@ const ProductoCompras = ({ onCompra }) => {
               className="d-flex justify-content-center m-3"
               style={{ filter: "drop-shadow(2px 4px 6px black)" }}
             >
-              <Card
-                key={producto.id}
-                title={producto.nombre}
-                image={producto.imagen}
-                price={`$${producto.precio}`}
-                description={producto.descripcion}
-                onAgregarCarrito={() => handleAgregarCarrito(producto)}
-              />
+              <Card key={producto.id} dataProducto={producto} />
             </Col>
           ))}
       </Row>
