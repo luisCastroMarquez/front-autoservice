@@ -1,6 +1,5 @@
 import React from "react";
 import { Card as BootstrapCard, Button } from "react-bootstrap";
-import { Link } from "react-router-dom"; // Importa Link
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useProductosContext } from "../context/ProductosContext";
@@ -10,6 +9,7 @@ const Card = ({ dataProducto }) => {
   const { addToCart } = useProductosContext();
 
   const redirectToDetail = () => navigate("/producto/" + dataProducto.id);
+
   const handleAddToCartClick = (producto) => {
     addToCart(producto);
   };
@@ -23,7 +23,7 @@ const Card = ({ dataProducto }) => {
       />
       <BootstrapCard.Body>
         <BootstrapCard.Title className="d-flex align-items-center">
-          {dataProducto.titulo}{" "}
+          {dataProducto.nombre}
           <Button variant="light" className="ml-2">
             <FaHeart />
           </Button>
@@ -34,14 +34,19 @@ const Card = ({ dataProducto }) => {
           alt="estrellas"
           width="30%"
         />
+        <BootstrapCard.Footer className="d-flex align-items-center justify-content-between">
+          <Button className="d-flex m-1" onClick={redirectToDetail}>
+            Ver Más
+          </Button>
 
-        <Button
-          variant="primary"
-          className="d-flex mr-3"
-          onClick={redirectToDetail}
-        >
-          Comprar Ahora
-        </Button>
+          <Button
+            variant="primary"
+            className="d-flex m-1"
+            onClick={() => handleAddToCartClick(dataProducto)}
+          >
+            Comprar Ahora
+          </Button>
+        </BootstrapCard.Footer>
       </BootstrapCard.Body>
     </BootstrapCard>
   );

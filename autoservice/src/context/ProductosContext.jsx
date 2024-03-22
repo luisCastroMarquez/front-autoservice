@@ -1,12 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
+// 1. Crear el Contexto que tenemos que consumir
 const ProductosContext = createContext();
 
+// . Crear el
 export const useProductosContext = () => {
   return useContext(ProductosContext);
 };
 
+// 2. Crear el Provider nos provee de aceso al contexto
 export const ProductoProvider = ({ children }) => {
   const [dataProductos, setDataProductos] = useState([]);
   const [dataCart, setDataCart] = useState([]);

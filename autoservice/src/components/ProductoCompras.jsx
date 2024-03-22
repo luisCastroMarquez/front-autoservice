@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useProductosContext } from "../context/ProductosContext";
 import {
   Container,
@@ -11,29 +11,32 @@ import {
   Button,
 } from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
-import { Link } from "react-router-dom"; // Importa useNavigate
 import Card from "./Card";
-import Footer from "./Footer";
 
 const ProductoCompras = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 4;
-
   const { id } = useParams();
   const { dataProductos, addToCart } = useProductosContext();
   const [dataProducto, setDataProducto] = useState({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
 
   useEffect(() => {
     const data = dataProductos.find((producto) => producto.id === id);
     console.log("el objeto essssss: " + data);
     console.log("pero el id essssss: " + id);
-
     setDataProducto(data);
-  }, [dataProductos, id]);
+  }, [dataProducto, id]);
 
   // Agrega al carro la producto
   const handleAddToCartClick = (producto) => {
     addToCart(producto);
+  };
+
+  const handleCantidadChange = (event) => {
+    // Obtener el nuevo valor del campo
+    const newCantidad = event.target.value;
+    // Realizar acciones con el nuevo valor si es necesario
   };
 
   const handlePaginaAnterior = () => {
@@ -42,6 +45,13 @@ const ProductoCompras = () => {
 
   const handlePaginaSiguiente = () => {
     setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+
+
+  const finalizarCompra = () => {
+    // Lógica para finalizar la compra...
+    agregarCompra(compra); // Donde "compra" es el objeto de la compra
   };
 
   return (
@@ -97,18 +107,16 @@ const ProductoCompras = () => {
         {/* Asegúrate de que productos esté definido y no esté vacío antes de pasar el producto */}
         {dataProductos.length > 0 && (
           <>
-            <Row className="m-5">
-              <Col xs={6}>
-                {dataProducto && (
+            {dataProductos.slice(0, 1).map((dataProducto) => (
+              <Row key={dataProducto.id} className="m-5">
+                <Col xs={6}>
                   <img
                     src={dataProducto.imagen}
                     alt="Producto"
                     className="img-fluid"
                   />
-                )}
-              </Col>
-              <Col xs={6}>
-                {dataProducto && (
+                </Col>
+                <Col xs={6}>
                   <>
                     <h1>{dataProducto.nombre}</h1>
                     <p>
@@ -133,26 +141,33 @@ const ProductoCompras = () => {
                       <InputGroup>
                         <InputGroup.Text>Cantidad</InputGroup.Text>
                       </InputGroup>
-                      <Form.Control id="cantidad" type="number" value={1} />
+                      <Form.Control
+                        id="cantidad"
+                        type="number"
+                        defaultValue={1}
+                        onChange={handleCantidadChange}
+                      />
                     </InputGroup>
                     <InputGroup xs={6} className="mb-3 gap-4">
                       <Button
                         variant="primary"
-                        onClick={handleAddToCartClick(dataProducto)}
+                        onClick={() => handleAddToCartClick(dataProducto)}
                       >
                         Agregar al Carrito
                       </Button>
-                      <Button variant="success">Comprar producto</Button>
-                      <Link to="/carrito">
+                      <Link to="/listado">
+                        <Button variant="success">Comprar producto</Button>
+                      </Link>
+                      <Link to="/productos">
                         <Button variant="secondary" className="mediumbutton">
                           Volver Atras
                         </Button>
                       </Link>
                     </InputGroup>
                   </>
-                )}
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            ))}
           </>
         )}
       </Col>
@@ -188,7 +203,6 @@ const ProductoCompras = () => {
           Siguiente
         </Button>
       </Col>
-      <Footer />
     </Container>
   );
 };

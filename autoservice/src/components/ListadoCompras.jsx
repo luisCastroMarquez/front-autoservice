@@ -68,7 +68,7 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
     // Agregar un retraso de 5 segundos antes de redirigir
     setTimeout(() => {
       // Puedes redirigir al usuario a la página de métodos de pago aquí
-      navigate("/Carrito");
+      navigate("/producto");
     }, 5000); // 5000 milisegundos = 5 segundos
   };
 
@@ -90,50 +90,51 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
             className="d-flex align-items-center"
             style={{ filter: "drop-shadow(4px 4px 8px black)", gap: "10px" }}
           >
-            {carrito.map((producto, index) => (
-              <ListGroup.Item
-                key={index}
-                className="d-flex align-items-center border-dark"
-              >
-                <Row className="d-flex align-items-center">
-                  <Col xs={2}>
-                    <img
-                      src={producto.imagen}
-                      alt={producto.nombre}
-                      className="img-fluid"
-                    />
-                  </Col>
-                  <Col xs={5}>
-                    <strong>
-                      <h5>
-                        {producto.nombre} - ${producto.precio} - Cantidad:
-                        {producto.cantidad}
-                      </h5>
-                    </strong>
-                  </Col>
-                  <Col xs={3}>
-                    <Form.Control
-                      type="number"
-                      value={producto.cantidad}
-                      onChange={(e) =>
-                        handleEditarCantidad(
-                          producto.cantidad,
-                          parseInt(e.target.value, 10)
-                        )
-                      }
-                    />
-                  </Col>
-                  <Col xs={2}>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleEliminarProducto(producto.id)}
-                    >
-                      Eliminar
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            ))}
+            {carrito &&
+              carrito.map((producto, index) => (
+                <ListGroup.Item
+                  key={index}
+                  className="d-flex align-items-center border-dark"
+                >
+                  <Row className="d-flex align-items-center">
+                    <Col xs={2}>
+                      <img
+                        src={producto.imagen}
+                        alt={producto.nombre}
+                        className="img-fluid"
+                      />
+                    </Col>
+                    <Col xs={5}>
+                      <strong>
+                        <h5>
+                          {producto.nombre} - ${producto.precio} - Cantidad:
+                          {producto.cantidad}
+                        </h5>
+                      </strong>
+                    </Col>
+                    <Col xs={3}>
+                      <Form.Control
+                        type="number"
+                        value={producto.cantidad}
+                        onChange={(e) =>
+                          handleEditarCantidad(
+                            producto.cantidad,
+                            parseInt(e.target.value, 10)
+                          )
+                        }
+                      />
+                    </Col>
+                    <Col xs={2}>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleEliminarProducto(producto.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              ))}
           </ListGroup>
 
           {/* Total de compras */}
@@ -154,7 +155,7 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
               {eliminadoMensaje}
             </Alert>
           )}
-          <Link to="/producto">
+          <Link to="/producto/:id">
             <Button variant="success" className="m-4">
               Volver Atras
             </Button>

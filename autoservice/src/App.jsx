@@ -36,7 +36,7 @@ const App = () => {
             />
             <Route path="/productos" element={<ListaProductos />} />
             <Route path="/producto/:id" element={<ProductoCompras />} />
-
+            <Route path="/listado" element={<ListadoCompras />} />
             <Route path="*" element={<Navigate replace to="/home/" />} />
           </Routes>
           <Footer />

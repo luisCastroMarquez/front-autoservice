@@ -1,9 +1,16 @@
 import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { Link } from "react-router-dom"; // Importa Link
+import { Link, useLocation } from "react-router-dom"; // Importa Link
 
 const NavBar = () => {
-  return (
+  const location = useLocation(); // Obtener la ubicación actual
+
+  // Función para verificar si la ubicación actual es la página principal
+  const isHomePage = () => {
+    return location.pathname === "/home/";
+  };
+
+  return isHomePage() ? (
     <Navbar xs={12} md={8} lg={7} className="d-flex" bg="white">
       <Navbar.Brand className="d-flex justify-content-center" href="#home">
         <img
@@ -41,7 +48,7 @@ const NavBar = () => {
         </Nav>
       </Navbar.Collapse>
     </Navbar>
-  );
+  ) : null;
 };
 
 export default NavBar;

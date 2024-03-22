@@ -20,7 +20,7 @@ const ListaProductos = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
 
-  console.log("Contenido :", dataProductos);
+  console.log("Contenido ñeeee:", dataProductos);
 
   const handlePaginaAnterior = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -130,7 +130,10 @@ const ListaProductos = () => {
               className="d-flex justify-content-center m-3"
               style={{ filter: "drop-shadow(2px 4px 6px black)" }}
             >
-              <Card key={producto.id} dataProducto={producto} />
+              <Card
+                key={producto.id}
+                dataProducto={producto}
+              />
             </Col>
           ))}
       </Row>
