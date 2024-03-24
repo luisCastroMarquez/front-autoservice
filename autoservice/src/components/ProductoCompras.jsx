@@ -9,28 +9,35 @@ import {
   Form,
   Nav,
   Button,
+  Alert,
 } from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
 import Card from "./Card";
 
 const ProductoCompras = () => {
   const { id } = useParams();
+  const parsedId = parseInt(id, 10);
+
   const { dataProductos, addToCart } = useProductosContext();
   const [dataProducto, setDataProducto] = useState({});
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
-    const data = dataProductos.find((producto) => producto.id === id);
-    console.log("el objeto essssss: " + data);
-    console.log("pero el id essssss: " + id);
+    const data = dataProductos.find((producto) => producto.id === parsedId);
     setDataProducto(data);
-  }, [dataProducto, id]);
+  }, [dataProductos, id]);
 
   // Agrega al carro la producto
   const handleAddToCartClick = (producto) => {
     addToCart(producto);
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
   };
 
   const handleCantidadChange = (event) => {
@@ -45,13 +52,6 @@ const ProductoCompras = () => {
 
   const handlePaginaSiguiente = () => {
     setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-
-
-  const finalizarCompra = () => {
-    // Lógica para finalizar la compra...
-    agregarCompra(compra); // Donde "compra" es el objeto de la compra
   };
 
   return (
@@ -93,7 +93,7 @@ const ProductoCompras = () => {
           <Link to="/login">
             <FaUser className="mr-3" style={{ fontSize: "200%" }} />
           </Link>
-          <Link to="/carrito">
+          <Link to="/producto/:id">
             <FaShoppingBasket className="mr-3" style={{ fontSize: "200%" }} />
           </Link>
           <Link to="/listado">
@@ -103,73 +103,77 @@ const ProductoCompras = () => {
       </Row>
 
       {/* Contenido principal */}
-      <Col xs={8} className="">
+      <Col className="d-flex">
         {/* Asegúrate de que productos esté definido y no esté vacío antes de pasar el producto */}
-        {dataProductos.length > 0 && (
-          <>
-            {dataProductos.slice(0, 1).map((dataProducto) => (
-              <Row key={dataProducto.id} className="m-5">
-                <Col xs={6}>
-                  <img
-                    src={dataProducto.imagen}
-                    alt="Producto"
-                    className="img-fluid"
+        <>
+          <Row key={dataProducto.id} className="m-5 gap-5">
+            <Col xs={6}>
+              <img
+                src={dataProducto.imagen}
+                alt="Producto"
+                className="img-fluid"
+              />
+            </Col>
+            <Col xs={5}>
+              <>
+                <h1>{dataProducto.nombre}</h1>
+                <p>
+                  <strong>{dataProducto.descripcion}</strong>
+                </p>
+                <p>
+                  <strong>Precio: ${dataProducto.precio}</strong>
+                </p>
+                <InputGroup className="mb-3">
+                  <InputGroup>
+                    <InputGroup.Text>Total</InputGroup.Text>
+                  </InputGroup>
+                  <Form.Control
+                    id="total"
+                    type="text"
+                    readOnly
+                    value={`$${dataProducto.precio}`}
                   />
-                </Col>
-                <Col xs={6}>
-                  <>
-                    <h1>{dataProducto.nombre}</h1>
-                    <p>
-                      <strong>{dataProducto.descripcion}</strong>
-                    </p>
-                    <p>
-                      <strong>Precio: ${dataProducto.precio}</strong>
-                    </p>
-                    <p>Detalles adicionales del producto.</p>
-                    <InputGroup className="mb-3">
-                      <InputGroup>
-                        <InputGroup.Text>Total</InputGroup.Text>
-                      </InputGroup>
-                      <Form.Control
-                        id="total"
-                        type="text"
-                        readOnly
-                        value={`$${dataProducto.precio}`}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroup>
-                        <InputGroup.Text>Cantidad</InputGroup.Text>
-                      </InputGroup>
-                      <Form.Control
-                        id="cantidad"
-                        type="number"
-                        defaultValue={1}
-                        onChange={handleCantidadChange}
-                      />
-                    </InputGroup>
-                    <InputGroup xs={6} className="mb-3 gap-4">
-                      <Button
-                        variant="primary"
-                        onClick={() => handleAddToCartClick(dataProducto)}
-                      >
-                        Agregar al Carrito
-                      </Button>
-                      <Link to="/listado">
-                        <Button variant="success">Comprar producto</Button>
-                      </Link>
-                      <Link to="/productos">
-                        <Button variant="secondary" className="mediumbutton">
-                          Volver Atras
-                        </Button>
-                      </Link>
-                    </InputGroup>
-                  </>
-                </Col>
-              </Row>
-            ))}
-          </>
-        )}
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <InputGroup>
+                    <InputGroup.Text>Cantidad</InputGroup.Text>
+                  </InputGroup>
+                  <Form.Control
+                    id="cantidad"
+                    type="number"
+                    defaultValue={1}
+                    onChange={handleCantidadChange}
+                  />
+                </InputGroup>
+                <InputGroup xs={6} className="mb-3 gap-4">
+                  <Button
+                    variant="primary"
+                    onClick={() => handleAddToCartClick(dataProducto)}
+                  >
+                    Agregar al Carrito
+                  </Button>
+                  <Link to="/listado">
+                    <Button variant="success">Comprar producto</Button>
+                  </Link>
+                  <Link to="/productos">
+                    <Button variant="secondary" className="mediumbutton">
+                      Volver Atras
+                    </Button>
+                  </Link>
+                  {/* Alerta de producto agregado al carrito */}
+                  <Alert
+                    variant="success"
+                    show={showAlert}
+                    onClose={() => setShowAlert(false)}
+                    dismissible
+                  >
+                    Producto agregado al carrito exitosamente!!!
+                  </Alert>
+                </InputGroup>
+              </>
+            </Col>
+          </Row>
+        </>
       </Col>
 
       {/* Cards */}

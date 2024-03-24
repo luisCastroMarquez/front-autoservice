@@ -30,12 +30,18 @@ export const ProductoProvider = ({ children }) => {
   };
 
   const addToCart = (producto) => {
-    setDataCart((prevCart) => [...prevCart, producto]);
-    setTotalCart((prevTotal) => prevTotal + producto.price);
-    setProductosQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [producto.id]: (prevQuantities[producto.id] || 0) + 1,
-    }));
+    if (producto && producto.id) {
+      setDataCart((prevCart) => [...prevCart, producto]);
+      setTotalCart((prevTotal) => prevTotal + producto.precio);
+      setProductosQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [producto.id]: (prevQuantities[producto.id] || 0) + 1,
+      }));
+    } else {
+      console.error(
+        "El producto no tiene la propiedad 'id' definida correctamente."
+      );
+    }
   };
 
   const removeFromCart = (producto) => {
@@ -45,13 +51,13 @@ export const ProductoProvider = ({ children }) => {
         ...prevQuantities,
         [producto.id]: prevQuantities[producto.id] - 1,
       }));
-      setTotalCart((prevTotal) => prevTotal - producto.price);
+      setTotalCart((prevTotal) => prevTotal - producto.precio);
     } else {
       // Si la cantidad es 1 o menos, eliminamos la producto completa
       setDataCart((prevCart) =>
         prevCart.filter((item) => item.id !== producto.id)
       );
-      setTotalCart((prevTotal) => prevTotal - producto.price);
+      setTotalCart((prevTotal) => prevTotal - producto.precio);
       setProductosQuantities((prevQuantities) => {
         const updatedQuantities = { ...prevQuantities };
         delete updatedQuantities[producto.id];

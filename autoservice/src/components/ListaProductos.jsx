@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useProductosContext } from "../context/ProductosContext";
 
 import {
@@ -9,6 +9,7 @@ import {
   Button,
   InputGroup,
   Nav,
+  Alert,
 } from "react-bootstrap";
 import { FaShoppingCart, FaShoppingBasket, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link
@@ -130,10 +131,7 @@ const ListaProductos = () => {
               className="d-flex justify-content-center m-3"
               style={{ filter: "drop-shadow(2px 4px 6px black)" }}
             >
-              <Card
-                key={producto.id}
-                dataProducto={producto}
-              />
+              <Card key={producto.id} dataProducto={producto} />
             </Col>
           ))}
       </Row>

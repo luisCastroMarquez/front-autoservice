@@ -9,75 +9,72 @@ import {
   Alert,
 } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
+import { useProductosContext } from "../context/ProductosContext";
 
-const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
-  const [compraFinalizada, setCompraFinalizada] = useState(false);
-  const [eliminadoMensaje, setEliminadoMensaje] = useState("");
-  const [total, setTotal] = useState([]); // Estado para almacenar el total
+const ListadoCompras = () => {
+  const {
+    dataCart,
+    productosQuantities,
+    totalCart,
+    addToCart,
+    removeFromCart,
+  } = useProductosContext();
+
   const navigate = useNavigate();
+  const [showRedirectingAlert, setShowRedirectingAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [cuotas, setCuotas] = useState(1); // Estado para el número de cuotas
 
-  console.log("Contenido del carrito:", carrito);
-  console.log("Contenido total:", total);
+  const handleAddToCart = (producto) => {
+    addToCart(producto);
+  };
 
-  // Función para calcular el total
-  const calcularTotal = () => {
-    if (!carrito || carrito.length === 0) {
-      return 0;
-    }
+  const handleRemoveFromCart = (producto) => {
+    removeFromCart(producto);
+  };
 
-    // Suma de cantidades por precios de cada producto en el carrito
-    const totalCompra = carrito.reduce((total, producto) => {
-      // Asegúrate de que el producto tenga las propiedades necesarias
-      if (producto && producto.precio && producto.cantidad) {
-        return total + producto.precio * producto.cantidad;
+  const groupProductosByType = (cart) => {
+    const groupedProductos = {};
+    cart.forEach((producto) => {
+      if (groupedProductos[producto.id]) {
+        groupedProductos[producto.id].cantidad += 1;
       } else {
-        // Si el producto no tiene las propiedades necesarias, simplemente ignóralo
-        return total;
+        groupedProductos[producto.id] = {
+          producto,
+          cantidad: 1,
+        };
       }
-    }, 0);
-
-    return totalCompra;
+    });
+    return Object.values(groupedProductos);
   };
 
-  const handleEditarCantidad = (productoId, nuevaCantidad) => {
-    // Lógica para editar la cantidad del producto
-    onEditarCantidad(productoId, nuevaCantidad);
-  };
-
-  // Función para eliminar un producto del carrito
-  const handleEliminarProducto = (productoId) => {
-    const producto = carrito.find((p) => p.id === productoId);
-
-    if (producto) {
-      onEliminarProducto(productoId);
-      setEliminadoMensaje(`${producto.nombre} ha sido eliminado del carrito.`);
-
-      // Recalcula el total después de eliminar el producto
-      const totalCalculado = calcularTotal();
-      setTotal(totalCalculado);
-
-      // Limpiar el mensaje después de 3 segundos
-      setTimeout(() => {
-        setEliminadoMensaje("");
-      }, 3500);
-    }
-  };
-
-  const finalizarCompra = () => {
-    setCompraFinalizada(true);
-    // Agregar un retraso de 5 segundos antes de redirigir
+  const handleBtnPago = () => {
+    setShowRedirectingAlert(true);
     setTimeout(() => {
-      // Puedes redirigir al usuario a la página de métodos de pago aquí
-      navigate("/producto");
-    }, 5000); // 5000 milisegundos = 5 segundos
+      setShowRedirectingAlert(false);
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+        navigate("/"); // Redirige al usuario a la página principal después del pago exitoso
+      }, 2000); // Oculta el mensaje de pago exitoso después de 2 segundos
+    }, 2000); // Muestra el mensaje de redirección durante 2 segundos antes de mostrar el mensaje de pago exitoso
   };
 
-  // Efecto para calcular el total cuando cambie el carrito
-  useEffect(() => {
-    // Calcular el total al cargar el carrito y cuando cambie
-    const totalCalculado = calcularTotal();
-    setTotal(totalCalculado);
-  }, [carrito]);
+  // Función para formatear el valor a pesos chilenos
+  const formatToChileanPesos = (value) => {
+    return value.toLocaleString("es-CL", {
+      style: "currency",
+      currency: "CLP",
+    });
+  };
+
+  // Función para manejar cambios en el input de cuotas
+  const handleCuotasChange = (event) => {
+    const value = parseInt(event.target.value, 10); // Convertir el valor a entero
+    setCuotas(value); // Actualizar el estado de las cuotas
+  };
+
+  const groupedProductos = groupProductosByType(dataCart);
 
   return (
     <Container className="d-flex mt-4">
@@ -87,86 +84,144 @@ const ListadoCompras = ({ carrito, onEditarCantidad, onEliminarProducto }) => {
 
           {/* Lista de productos en el carrito */}
           <ListGroup
-            className="d-flex align-items-center"
+            className="d-flex align-items-center "
             style={{ filter: "drop-shadow(4px 4px 8px black)", gap: "10px" }}
           >
-            {carrito &&
-              carrito.map((producto, index) => (
-                <ListGroup.Item
-                  key={index}
-                  className="d-flex align-items-center border-dark"
-                >
-                  <Row className="d-flex align-items-center">
-                    <Col xs={2}>
-                      <img
-                        src={producto.imagen}
-                        alt={producto.nombre}
-                        className="img-fluid"
-                      />
-                    </Col>
-                    <Col xs={5}>
-                      <strong>
-                        <h5>
-                          {producto.nombre} - ${producto.precio} - Cantidad:
-                          {producto.cantidad}
-                        </h5>
-                      </strong>
-                    </Col>
-                    <Col xs={3}>
-                      <Form.Control
-                        type="number"
-                        value={producto.cantidad}
-                        onChange={(e) =>
-                          handleEditarCantidad(
-                            producto.cantidad,
-                            parseInt(e.target.value, 10)
-                          )
-                        }
-                      />
-                    </Col>
-                    <Col xs={2}>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleEliminarProducto(producto.id)}
-                      >
-                        Eliminar
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
+            {groupedProductos.map((group) => (
+              <ListGroup.Item
+                key={group.producto.id}
+                className="d-flex align-items-center border-dark"
+              >
+                <Row className="d-flex align-items-center">
+                  <Col xs={3}>
+                    <img
+                      src={group.producto.imagen}
+                      alt={group.producto.nombre}
+                      className="img-fluid"
+                    />
+                  </Col>
+                  <Col xs={3}>
+                    <strong>
+                      <h5>{group.producto.nombre}</h5>
+                    </strong>
+                  </Col>
+                  <Col xs={3}>
+                    <strong>
+                      {formatToChileanPesos(
+                        group.producto.precio *
+                          productosQuantities[group.producto.id]
+                      )}
+                    </strong>
+                  </Col>
+                  <Col className="d-flex justify-content-between gap-5" xs={3}>
+                    <Button
+                      className="d-flex "
+                      variant="danger"
+                      onClick={() => handleRemoveFromCart(group.producto)}
+                    >
+                      -
+                    </Button>
+                    <strong>
+                      <p>{productosQuantities[group.producto.id] || 0}</p>
+                    </strong>
+                    <Button
+                      className="btnCarro btn-large"
+                      variant="success"
+                      onClick={() => handleAddToCart(group.producto)}
+                    >
+                      +
+                    </Button>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            ))}
           </ListGroup>
-
           {/* Total de compras */}
-          <div className="mt-3">
-            <h4>Total: ${total}</h4>
+          <div className="mt-5">
+            <h2>Total: {formatToChileanPesos(totalCart)}</h2>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Precio Total a pagar</th>
+                  <th>Precio total hasta 6 meses precio contado </th>
+                </tr>
+              </thead>
+              <tbody>
+                {groupedProductos
+                  .sort((a, b) =>
+                    a.producto.nombre.localeCompare(b.producto.nombre)
+                  )
+                  .map((group) => {
+                    const precioTotal =
+                      group.producto.precio *
+                      (productosQuantities[group.producto.id] || 0);
+                    let precioPorCuota = (totalCart || 0) / cuotas;
+
+                    // Aplicar interés del 2% después de la sexta cuota
+                    if (cuotas > 6) {
+                      const cuotasDespuesDe6 = cuotas - 6;
+                      const interes = 1.2; // Factor de interés del 2%
+                      precioPorCuota *= Math.pow(interes, cuotasDespuesDe6);
+                    }
+                    return (
+                      <tr key={group.producto.id}>
+                        <td>{group.producto.nombre}</td>
+                        <td>{productosQuantities[group.producto.id] || 0}</td>
+                        <td>{formatToChileanPesos(group.producto.precio)}</td>
+                        <td>{formatToChileanPesos(precioTotal)}</td>
+                        <td>{formatToChileanPesos(precioPorCuota)}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+            <div className="row mt-3">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="formCuotas">
+                    <strong>Número de Cuotas:</strong>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="formCuotas"
+                    value={cuotas}
+                    onChange={handleCuotasChange}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* Mensaje después de la compra */}
-          {compraFinalizada && (
-            <p className="text-success mt-3">
-              Compra finalizada. Redirigiendo a métodos de pago...
-            </p>
-          )}
-
-          {/* Mensaje de eliminación */}
-          {eliminadoMensaje && (
-            <Alert variant="success" className="mt-3">
-              {eliminadoMensaje}
-            </Alert>
-          )}
-          <Link to="/producto/:id">
+          <Link to="/productos">
             <Button variant="success" className="m-4">
               Volver Atras
             </Button>
           </Link>
+          <Button variant="primary" onClick={handleBtnPago}>
+            Pagar
+          </Button>
+          {/* Alerta de pago completado */}
+          <Alert
+            variant="info"
+            show={showRedirectingAlert}
+            onClose={() => setShowRedirectingAlert(false)}
+            dismissible
+          >
+            Redirigiendo al método de pago...
+          </Alert>
 
-          {/* Botón para finalizar la compra */}
-          {!compraFinalizada && (
-            <Button variant="primary" className="" onClick={finalizarCompra}>
-              Finalizar Compra
-            </Button>
-          )}
+          {/* Alerta de pago exitoso */}
+          <Alert
+            variant="success"
+            show={showSuccessAlert}
+            onClose={() => setShowSuccessAlert(false)}
+            dismissible
+          >
+            ¡Pago exitoso!
+          </Alert>
         </Col>
       </Row>
     </Container>

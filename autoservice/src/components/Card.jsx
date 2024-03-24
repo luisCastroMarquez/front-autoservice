@@ -9,9 +9,16 @@ const Card = ({ dataProducto }) => {
   const { addToCart } = useProductosContext();
 
   const redirectToDetail = () => navigate("/producto/" + dataProducto.id);
-
   const handleAddToCartClick = (producto) => {
     addToCart(producto);
+  };
+
+  // Función para formatear el valor a pesos chilenos
+  const formatToChileanPesos = (value) => {
+    return value.toLocaleString("es-CL", {
+      style: "currency",
+      currency: "CLP",
+    });
   };
 
   return (
@@ -22,26 +29,28 @@ const Card = ({ dataProducto }) => {
         alt={dataProducto.titulo}
       />
       <BootstrapCard.Body>
-        <BootstrapCard.Title className="d-flex align-items-center">
+        <BootstrapCard.Title className="d-flex align-items-center justify-content-between">
           {dataProducto.nombre}
           <Button variant="light" className="ml-2">
             <FaHeart />
           </Button>
         </BootstrapCard.Title>
-        <BootstrapCard.Text>{dataProducto.precio}</BootstrapCard.Text>
+        <BootstrapCard.Text>
+          {formatToChileanPesos(dataProducto.precio)}
+        </BootstrapCard.Text>
         <img
           src="https://media.istockphoto.com/id/1006074668/es/vector/cinco-estrellas-valorar-icono-vector.jpg?s=612x612&w=0&k=20&c=3D5Wn86pIOathXUX_zX7m5IButhW01YIonSrME7oroI="
           alt="estrellas"
           width="30%"
         />
-        <BootstrapCard.Footer className="d-flex align-items-center justify-content-between">
-          <Button className="d-flex m-1" onClick={redirectToDetail}>
+        <BootstrapCard.Footer className="d-flex gap-2">
+          <Button className="d-flex " onClick={redirectToDetail}>
             Ver Más
           </Button>
 
           <Button
-            variant="primary"
-            className="d-flex m-1"
+            variant="success"
+            className="d-flex "
             onClick={() => handleAddToCartClick(dataProducto)}
           >
             Comprar Ahora

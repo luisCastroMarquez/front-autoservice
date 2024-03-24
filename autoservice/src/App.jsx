@@ -39,7 +39,8 @@ const App = () => {
             <Route path="/listado" element={<ListadoCompras />} />
             <Route path="*" element={<Navigate replace to="/home/" />} />
           </Routes>
-          <Footer />
+          {/* Condición para mostrar el Footer */}
+          {window.location.pathname !== "/login" && <Footer />}
         </BrowserRouter>
       </ProductoProvider>
     </>
