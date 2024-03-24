@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Row,
@@ -24,6 +24,9 @@ const ListadoCompras = () => {
   const [showRedirectingAlert, setShowRedirectingAlert] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [cuotas, setCuotas] = useState(1); // Estado para el número de cuotas
+  const [cuotasTotal, setCuotasTotal] = useState(0);
+  const [cuotaValue, setCuotaValue] = useState(0);
+  const [totalPagoCredito, setTotalPagoCredito] = useState(0);
 
   const handleAddToCart = (producto) => {
     addToCart(producto);
@@ -70,8 +73,28 @@ const ListadoCompras = () => {
 
   // Función para manejar cambios en el input de cuotas
   const handleCuotasChange = (event) => {
-    const value = parseInt(event.target.value, 10); // Convertir el valor a entero
-    setCuotas(value); // Actualizar el estado de las cuotas
+    const newCuotas = parseInt(event.target.value, 10); // Convertir el valor a entero
+    setCuotas(newCuotas); // Actualizar el estado de las cuotas
+
+    // Calcula el total a pagar en cuotas
+    let totalCuotas = totalCart / newCuotas;
+    totalCuotas = Math.round(totalCuotas);
+    setCuotasTotal(parseInt(totalCuotas.toFixed(1))); // Redondea y convierte a entero
+
+    let valorCuota = totalCart / newCuotas;
+    valorCuota = Math.round(valorCuota);
+    if (newCuotas >= 7) {
+      valorCuota *= 1.25; // Aplica el 22% de interés adicional después de la sexta cuota
+      valorCuota = Math.round(valorCuota); // Redondea el valor de cada cuota después del 20% de interés adicional
+    }
+    setCuotaValue(parseInt(valorCuota.toFixed(1))); // Redondea y convierte a entero
+
+    setCuotaValue(valorCuota);
+
+    // Calcula el total a pagar con crédito
+    let totalPagoCredito = newCuotas * valorCuota;
+    totalPagoCredito = Math.round(totalPagoCredito);
+    setTotalPagoCredito(parseInt(totalPagoCredito.toFixed(1))); // Redondea y convierte a entero
   };
 
   const groupedProductos = groupProductosByType(dataCart);
@@ -138,7 +161,6 @@ const ListadoCompras = () => {
           </ListGroup>
           {/* Total de compras */}
           <div className="mt-5">
-            <h2>Total: {formatToChileanPesos(totalCart)}</h2>
             <table className="table table-striped">
               <thead>
                 <tr>
@@ -146,7 +168,6 @@ const ListadoCompras = () => {
                   <th>Cantidad</th>
                   <th>Precio Unitario</th>
                   <th>Precio Total a pagar</th>
-                  <th>Precio total hasta 6 meses precio contado </th>
                 </tr>
               </thead>
               <tbody>
@@ -159,7 +180,6 @@ const ListadoCompras = () => {
                       group.producto.precio *
                       (productosQuantities[group.producto.id] || 0);
                     let precioPorCuota = (totalCart || 0) / cuotas;
-
                     // Aplicar interés del 2% después de la sexta cuota
                     if (cuotas > 6) {
                       const cuotasDespuesDe6 = cuotas - 6;
@@ -172,17 +192,16 @@ const ListadoCompras = () => {
                         <td>{productosQuantities[group.producto.id] || 0}</td>
                         <td>{formatToChileanPesos(group.producto.precio)}</td>
                         <td>{formatToChileanPesos(precioTotal)}</td>
-                        <td>{formatToChileanPesos(precioPorCuota)}</td>
                       </tr>
                     );
                   })}
               </tbody>
             </table>
-            <div className="row mt-3">
+            <div className="row mt-5">
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="formCuotas">
-                    <strong>Número de Cuotas:</strong>
+                    <strong>Cuotas Hasta 6 Meses Precio Contado:</strong>
                   </label>
                   <input
                     type="number"
@@ -192,36 +211,80 @@ const ListadoCompras = () => {
                     onChange={handleCuotasChange}
                   />
                 </div>
+                <h2 className="mt-5">
+                  Total Valor Contado: {formatToChileanPesos(totalCart)}
+                </h2>
+                <Link to="/productos">
+                  <Button variant="success" className="m-4">
+                    Volver Atras
+                  </Button>
+                </Link>
+                <Button
+                  variant="primary"
+                  className="m-4"
+                  onClick={handleBtnPago}
+                >
+                  Pagar
+                </Button>
+                {/* Alerta de pago completado */}
+                <Alert
+                  variant="info"
+                  show={showRedirectingAlert}
+                  onClose={() => setShowRedirectingAlert(false)}
+                  dismissible
+                >
+                  Redirigiendo al método de pago...
+                </Alert>
+                {/* Alerta de pago exitoso */}
+                <Alert
+                  variant="success"
+                  show={showSuccessAlert}
+                  onClose={() => setShowSuccessAlert(false)}
+                  dismissible
+                >
+                  ¡Pago exitoso!
+                </Alert>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="formTotalCuotas">
+                    <strong>Total a pagar Cuota Contado :</strong>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="formCuotasTotal"
+                    value={cuotasTotal}
+                    readOnly // Para evitar que se edite manualmente
+                  />
+                </div>
+                <div className="form-group mt-4">
+                  <label htmlFor="formTotalCuotas">
+                    <strong>Valor cuota con Intereses:</strong>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="formCuotasTotal"
+                    value={cuotaValue}
+                    readOnly // Para evitar que se edite manualmente
+                  />
+                </div>
+                <div className="form-group mt-4">
+                  <label htmlFor="formTotalCuotas">
+                    <strong>Pago Total Credito:</strong>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="formCuotasTotal"
+                    value={totalPagoCredito}
+                    readOnly // Para evitar que se edite manualmente
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <Link to="/productos">
-            <Button variant="success" className="m-4">
-              Volver Atras
-            </Button>
-          </Link>
-          <Button variant="primary" onClick={handleBtnPago}>
-            Pagar
-          </Button>
-          {/* Alerta de pago completado */}
-          <Alert
-            variant="info"
-            show={showRedirectingAlert}
-            onClose={() => setShowRedirectingAlert(false)}
-            dismissible
-          >
-            Redirigiendo al método de pago...
-          </Alert>
-
-          {/* Alerta de pago exitoso */}
-          <Alert
-            variant="success"
-            show={showSuccessAlert}
-            onClose={() => setShowSuccessAlert(false)}
-            dismissible
-          >
-            ¡Pago exitoso!
-          </Alert>
         </Col>
       </Row>
     </Container>

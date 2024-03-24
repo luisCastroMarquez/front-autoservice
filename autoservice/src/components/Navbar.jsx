@@ -11,12 +11,12 @@ const NavBar = () => {
   };
 
   return isHomePage() ? (
-    <Navbar className="d-flex" bg="white">
+    <Navbar className="d-flex justify-content-center" bg="white">
       <Navbar.Brand className="d-flex justify-content-center" href="#home">
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/013/384/813/small/car-service-logo-design-illustration-car-repair-logo-vector.jpg"
           alt="Car Service"
-          style={{ width: "50%",  marginLeft: "150%" }}
+          style={{ width: "50%", marginLeft: "80%" }}
         />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -24,16 +24,16 @@ const NavBar = () => {
         className="d-flex justify-content-center"
         id="responsive-navbar-nav"
       >
-        <Nav className="d-flex align-items-center" style={{ marginLeft: "10%" }}>
+        <Nav
+          className="d-flex align-items-center"
+          style={{ marginLeft: "10%" }}
+        >
           <Nav.Link href="/#home">Inicio</Nav.Link>
           <Nav.Link href="/productos">Nuestros productos</Nav.Link>
           <Nav.Link href="#contact">Contactanos</Nav.Link>
           <Nav.Link href="#taller">Taller Mecanico</Nav.Link>
         </Nav>
-        <Nav
-          className="d-flex align-items-center"
-          style={{ marginLeft: "8%" }}
-        >
+        <Nav className="d-flex align-items-center" style={{ marginLeft: "8%" }}>
           {/* Utiliza Link para redirigir al componente Login */}
           <Link to="/login">
             <Button variant="outline-dark" className="m-1">
