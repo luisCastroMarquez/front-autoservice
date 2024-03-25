@@ -22,7 +22,9 @@ export const ProductoProvider = ({ children }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/productos");
+      const response = await axios.get(
+        "https://back-autoservice.onrender.com/productos"
+      );
       setDataProductos(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

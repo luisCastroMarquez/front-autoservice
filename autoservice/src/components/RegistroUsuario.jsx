@@ -21,7 +21,7 @@ const Registro = () => {
       if (formData.clave !== formData.confirmarClave) {
         throw new Error("Las contraseñas no coinciden");
       }
-      const response = await fetch("http://localhost:3000/usuarios", {
+      const response = await fetch("https://back-autoservice.onrender.com/usuarios", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

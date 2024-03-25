@@ -17,7 +17,7 @@ const PerfilGaleria = () => {
 
   const obtenerImagenesGaleria = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/galeria/${userId}`);
+      const response = await fetch(`https://back-autoservice.onrender.com/galeria/${userId}`);
       if (!response.ok) {
         throw new Error(
           "Error al obtener las imágenes de la galería" + response.statusText
@@ -41,7 +41,7 @@ const PerfilGaleria = () => {
       console.log("Nueva imagen:", nuevaImagen);
 
       // Realizar la solicitud POST al servidor
-      const response = await fetch("http://localhost:3000/galeria", {
+      const response = await fetch("https://back-autoservice.onrender.com/galeria", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
